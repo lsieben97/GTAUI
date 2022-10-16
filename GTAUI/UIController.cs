@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,8 +21,12 @@ namespace GTAUI
 
         private bool isInitialized = false;
         private List<UIComponent> components;
-        private bool gameControlWasDisabledLastFrame = false;
+        private Dictionary<Assembly, string[]> assemblyResources;
+        private bool isIterating = false;
+        private List<UIComponent> componentsToAdd;
+        private List<UIComponent> componentsToRemove;
 
+        private bool gameControlWasDisabledLastFrame = false;
         private bool disableGameControl = false;
         private int gameControlDisabledDelayCounter = 0;
         private bool showCursor = false;
@@ -31,8 +36,6 @@ namespace GTAUI
         private float previousMouseY = 0;
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
-        private float previousMouseScrollUp = 0;
-        private float previousMouseScrollDown = 0;
 
         public UIController()
         {
@@ -42,13 +45,17 @@ namespace GTAUI
             }
             else
             {
-                throw new Exception("Cannot create multiple instances for UIController");
+                throw new Exception("Cannot create multiple instances of UIController");
             }
         }
 
         public void Initialize()
         {
             components = new List<UIComponent>();
+            assemblyResources = new Dictionary<Assembly, string[]>();
+            componentsToAdd = new List<UIComponent>();
+            componentsToRemove = new List<UIComponent>();
+
             isInitialized = true;
             TEMP_debugText = new ScaledText(new PointF(50, 50), "");
             TEMP_debugText.Color = Color.Red;
@@ -63,6 +70,21 @@ namespace GTAUI
             if (Game.IsLoading == true || isInitialized == false)
             {
                 return;
+            }
+
+            if (isIterating == false)
+            {
+                foreach(UIComponent component in componentsToRemove)
+                {
+                    components.Remove(component);
+                }
+                componentsToRemove.Clear();
+
+                foreach (UIComponent component in componentsToAdd)
+                {
+                    components.Add(component);
+                }
+                componentsToAdd.Clear();
             }
 
             HandleGameControl();
@@ -118,9 +140,15 @@ namespace GTAUI
                 shouldFireMouseScroll = true;
             }
 
-
-            foreach (UIComponent component in components)
+            isIterating = true;
+            foreach (UIComponent component in components.Where(c => c.AlwaysOnTop == false))
             {
+                if (component.IsInitialized == false)
+                {
+                    component.FireInitialize();
+                    component.IsInitialized = true;
+                }
+
                 component.FireUpdate();
 
 
@@ -152,12 +180,51 @@ namespace GTAUI
                 }
             }
 
+            foreach (UIComponent component in components.Where(c => c.AlwaysOnTop == true))
+            {
+                if (component.IsInitialized == false)
+                {
+                    component.FireInitialize();
+                    component.IsInitialized = true;
+                }
+
+                component.FireUpdate();
+
+
+                if (shouldFireMouseMove)
+                {
+                    component.FireMouseMove(new PointF(actualX, actualY));
+                }
+
+                if (shouldFireMouseButtons)
+                {
+                    component.FireMouseButtonDown(actualMouseButtons);
+                }
+
+                if (shouldFireMouseScroll)
+                {
+                    if (cursorScrollDown > 0)
+                    {
+                        component.FireMouseScroll(ScrollDirection.Down);
+                    }
+                    else
+                    {
+                        component.FireMouseScroll(ScrollDirection.Up);
+                    }
+                }
+
+                if (component.Visible)
+                {
+                    component.FireRender();
+                }
+            }
+
+            isIterating = false;
+
             previousMouseX = actualX;
             previousMouseY = actualY;
             previousMouseAccept = cursorAccept;
             previousMouseCancel = cursorCancel;
-            previousMouseScrollUp = cursorScrollUp;
-            previousMouseScrollDown = cursorScrollDown;
         }
 
         private void HandleGameControl()
@@ -191,18 +258,22 @@ namespace GTAUI
 
         public void OnKeyDown(KeyEventArgs e)
         {
+            isIterating = true;
             foreach (UIComponent component in components)
             {
                 component.FireKeyDown(e);
             }
+            isIterating = false;
         }
 
         public void OnKeyUp(KeyEventArgs e)
         {
+            isIterating = true;
             foreach (UIComponent component in components)
             {
                 component.FireKeyUp(e);
             }
+            isIterating = false;
 
             if (e.KeyCode == Keys.Pause)
             {
@@ -234,13 +305,37 @@ namespace GTAUI
 
         public void AddComponent(UIComponent component)
         {
-            component.FireInitialize();
-            components.Add(component);
+            if (isIterating)
+            {
+                componentsToAdd.Add(component);
+            }
+            else
+            {
+                components.Add(component);
+            }
         }
 
         public void RemoveComponent(UIComponent component)
         {
-            components.Remove(component);
+            if (isIterating)
+            {
+                componentsToRemove.Add(component);
+            }
+            else
+            {
+                components.Remove(component);
+            }
+        }
+
+        public void RegisterAssemblyResources(Assembly assembly)
+        {
+            if (assemblyResources.ContainsKey(assembly))
+            {
+                return;
+            }
+            string[] resources = assembly.GetManifestResourceNames();
+            Log($"Registering the following resources from {assembly}:\n {string.Join("\n", resources)}");
+            assemblyResources.Add(assembly, resources);
         }
 
         private void DisableGameControl()

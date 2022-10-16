@@ -17,7 +17,10 @@ namespace GTAUI
         public bool IsFullScreen { get; set; } = false;
         public bool NeedsGameControlsDisabled { get; set; } = false;
         public bool NeedsVisibleMouseCursor { get; set; } = false;
+        public bool AlwaysOnTop { get; set; } = false;
         internal bool IsDisposed { get; set; } = false;
+
+        internal bool IsInitialized { get; set; } = false;
 
         protected UIComponent Parent { get; private set; } = null;
 
