@@ -110,7 +110,7 @@ namespace GTAUI.UI.Components
             UpdateDisplayText();
         }
 
-        public override void OnInitialize()
+        protected override void OnInitialize()
         {
             textElement = new ScaledText(Position, Text);
             textElement.Color = Color;
@@ -118,7 +118,7 @@ namespace GTAUI.UI.Components
             currentCursorIndex = Text.Length;
         }
 
-        public override void OnKeyDown(KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             if (HasFocus == false)
             {
@@ -223,12 +223,12 @@ namespace GTAUI.UI.Components
             }
         }
 
-        public override void Render()
+        protected override void Render()
         {
             textElement.Draw();
         }
 
-        public override void Update()
+        protected override void Update()
         {
             if (blinkDelay != 0)
             {

@@ -95,7 +95,7 @@ namespace GTAUI
         /// This method is called every time a key is pressed down. After this method returns, it will also be called on all child components if there are any.
         /// </summary>
         /// <param name="e">The Event arguments</param>
-        public virtual void OnKeyDown(KeyEventArgs e)
+        protected virtual void OnKeyDown(KeyEventArgs e)
         {
         }
 
@@ -112,7 +112,7 @@ namespace GTAUI
         /// This method is called every time a key is lifted up. After this method returns, it will also be called on all child components if there are any.
         /// </summary>
         /// <param name="e">The Event arguments</param>
-        public virtual void OnKeyUp(KeyEventArgs e)
+        protected virtual void OnKeyUp(KeyEventArgs e)
         {
         }
 
@@ -128,7 +128,7 @@ namespace GTAUI
         /// <summary>
         /// This method is called by the <see cref="UIController"/> after the component is added to the list of components to handle. After this method returns, it will also be called on all child components if there are any.
         /// </summary>
-        public virtual void OnInitialize()
+        protected virtual void OnInitialize()
         {
         }
 
@@ -144,7 +144,7 @@ namespace GTAUI
         /// <summary>
         /// This method is called by the <see cref="UIController"/> after the component is removed from the list of components to handle. After this method returns, it will also be called on all child components if there are any.
         /// </summary>
-        public virtual void OnDisposed()
+        protected virtual void OnDisposed()
         {
         }
 
@@ -160,7 +160,7 @@ namespace GTAUI
         /// This method is called bythe <see cref="UIController"/> when the mouse position is different from the last frame.
         /// </summary>
         /// <param name="position">The new position of the mouse.</param>
-        public virtual void OnMouseMove(PointF position)
+        protected virtual void OnMouseMove(PointF position)
         {
         }
 
@@ -178,7 +178,7 @@ namespace GTAUI
         /// If the user presses the left mouse down, holds it and releases it, this method will be called 2 times, first with <see cref="MouseButtons.Left"/> and secondly with <see cref="MouseButtons.None"/> 
         /// </summary>
         /// <param name="buttons">The new mouse button state</param>
-        public virtual void OnMouseButtonChange(MouseButtons buttons)
+        protected virtual void OnMouseButtonChange(MouseButtons buttons)
         {
         }
 
@@ -195,7 +195,7 @@ namespace GTAUI
         /// This method is called every frame the mouse is scrolling.
         /// </summary>
         /// <param name="direction">The direction the mouse is scrolling.</param>
-        public virtual void OnMouseScroll(ScrollDirection direction)
+        protected virtual void OnMouseScroll(ScrollDirection direction)
         {
         }
 
@@ -211,7 +211,7 @@ namespace GTAUI
         /// <summary>
         /// This method is called every frame the component is handled by the <see cref="UIController"/>.
         /// </summary>
-        public virtual void Update()
+        protected virtual void Update()
         {
         }
 
@@ -280,7 +280,7 @@ namespace GTAUI
         /// <summary>
         /// This method is called every frame the component is handled by the <see cref="UIController"/> and the <see cref="Visible"/> property is <c>true</c>.
         /// </summary>
-        public abstract void Render();
+        protected abstract void Render();
 
         /// <summary>
         /// Remove the component from the list of components managed by the <see cref="UIController"/>

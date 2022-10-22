@@ -82,7 +82,7 @@ namespace GTAUI.Screens
         {
         }
 
-        public override void OnInitialize()
+        protected override void OnInitialize()
         {
             base.OnInitialize();
 
@@ -124,7 +124,7 @@ namespace GTAUI.Screens
             editableText.HasFocus = true;
         }
 
-        public override void OnKeyDown(KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             if (e.KeyCode == Keys.Escape)
             {
@@ -143,7 +143,7 @@ namespace GTAUI.Screens
 
         }
 
-        public override void Render()
+        protected override void Render()
         {
             descriptionText.Draw();
             backgroundRectangle.Draw();

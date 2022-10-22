@@ -65,7 +65,7 @@ namespace GTAUI.Screens
         {
         }
 
-        public override void OnInitialize()
+        protected override void OnInitialize()
         {
             promptText = new ScaledText(new PointF(), Prompt, 1.5f, GTA.UI.Font.Pricedown);
             promptText.Color = Color.FromArgb(240, 200, 80);
@@ -138,7 +138,7 @@ namespace GTAUI.Screens
             descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
         }
 
-        public override void Render()
+        protected override void Render()
         {
             descriptionText.Draw();
             backgroundRectangle.Draw();
