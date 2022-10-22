@@ -37,6 +37,16 @@ namespace GTAUI
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
 
+        public UIController GetInstance()
+        {
+            if (instance == null)
+            {
+                throw new Exception("Unable to get an instance of UIController as no instance exists!");
+            }
+
+            return instance;
+        }
+
         public UIController()
         {
             if (instance == null)
@@ -51,6 +61,11 @@ namespace GTAUI
 
         public void Initialize()
         {
+            if(File.Exists("GTAUI.log"))
+            {
+                File.Delete("GTAUI.log");
+            }
+
             components = new List<UIComponent>();
             assemblyResources = new Dictionary<Assembly, string[]>();
             componentsToAdd = new List<UIComponent>();
@@ -141,46 +156,7 @@ namespace GTAUI
             }
 
             isIterating = true;
-            foreach (UIComponent component in components.Where(c => c.AlwaysOnTop == false))
-            {
-                if (component.IsInitialized == false)
-                {
-                    component.FireInitialize();
-                    component.IsInitialized = true;
-                }
-
-                component.FireUpdate();
-
-
-                if (shouldFireMouseMove)
-                {
-                    component.FireMouseMove(new PointF(actualX, actualY));
-                }
-
-                if (shouldFireMouseButtons)
-                {
-                    component.FireMouseButtonDown(actualMouseButtons);
-                }
-
-                if (shouldFireMouseScroll)
-                {
-                    if (cursorScrollDown > 0)
-                    {
-                        component.FireMouseScroll(ScrollDirection.Down);
-                    }
-                    else
-                    {
-                        component.FireMouseScroll(ScrollDirection.Up);
-                    }
-                }
-
-                if (component.Visible)
-                {
-                    component.FireRender();
-                }
-            }
-
-            foreach (UIComponent component in components.Where(c => c.AlwaysOnTop == true))
+            foreach (UIComponent component in components)
             {
                 if (component.IsInitialized == false)
                 {
@@ -229,19 +205,12 @@ namespace GTAUI
 
         private void HandleGameControl()
         {
-            if (components.Any(c => c.NeedsGameControlsDisabled && c.Visible) && disableGameControl == false)
-            {
-                DisableGameControl();
-
-            }
-            else if (components.Any(c => c.NeedsGameControlsDisabled && c.Visible) == false && disableGameControl == true)
-            {
-                EnableGameControl();
-            }
 
             if (gameControlDisabledDelayCounter > 0)
             {
                 gameControlDisabledDelayCounter--;
+                Game.DisableAllControlsThisFrame();
+                return;
             }
 
             if (gameControlWasDisabledLastFrame == true)
@@ -254,10 +223,21 @@ namespace GTAUI
             {
                 Game.DisableAllControlsThisFrame();
             }
+
+            if (components.Any(c => c.NeedsGameControlsDisabled && c.Visible) && disableGameControl == false)
+            {
+                DisableGameControl();
+
+            }
+            else if (components.Any(c => c.NeedsGameControlsDisabled && c.Visible) == false && disableGameControl == true)
+            {
+                EnableGameControl();
+            }
         }
 
         public void OnKeyDown(KeyEventArgs e)
         {
+            UIController.Log($"Receiving key down event for UIController {e.KeyCode}");
             isIterating = true;
             foreach (UIComponent component in components)
             {
@@ -267,7 +247,7 @@ namespace GTAUI
         }
 
         public void OnKeyUp(KeyEventArgs e)
-        {
+        { 
             isIterating = true;
             foreach (UIComponent component in components)
             {
@@ -348,6 +328,8 @@ namespace GTAUI
         private void EnableGameControl()
         {
             disableGameControl = false;
+            gameControlWasDisabledLastFrame = true;
+            gameControlDisabledDelayCounter = 0;
         }
 
         internal static void Log(string message)

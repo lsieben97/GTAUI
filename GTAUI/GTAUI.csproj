@@ -49,12 +49,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="Screens\AlertScreen.cs" />
+    <Compile Include="Screens\InputScreen.cs" />
     <Compile Include="Screens\ProgressScreen.cs" />
     <Compile Include="ScrollDirection.cs" />
     <Compile Include="UIComponent.cs" />
     <Compile Include="UIController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UI\Components\EditableText.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

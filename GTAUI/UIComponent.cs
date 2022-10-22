@@ -11,20 +11,22 @@ namespace GTAUI
 {
     public abstract class UIComponent : IDisposable
     {
-        public bool Visible { get; set; } = false;
+        public bool Visible { get => visible; set { visible = value; UIController.Log($"Setting UIComponent {this} visible to {value}"); UIController.Log(Environment.StackTrace); } }
         public SizeF Size { get; set; } = new SizeF();
         public PointF Position { get; set; } = new PointF();
         public bool IsFullScreen { get; set; } = false;
         public bool NeedsGameControlsDisabled { get; set; } = false;
         public bool NeedsVisibleMouseCursor { get; set; } = false;
-        public bool AlwaysOnTop { get; set; } = false;
         internal bool IsDisposed { get; set; } = false;
+
+        public bool HasFocus { get; set; }
 
         internal bool IsInitialized { get; set; } = false;
 
         protected UIComponent Parent { get; private set; } = null;
 
         internal List<UIComponent> ChildComponents = new List<UIComponent>();
+        private bool visible = false;
 
         public UIComponent()
         {
@@ -33,14 +35,22 @@ namespace GTAUI
                 Size = new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height);
                 Position = new PointF(0, 0);
             }
-            UIController.instance.AddComponent(this);
         }
 
         internal void FireKeyDown(KeyEventArgs e)
         {
+            UIController.Log($"Firing OnKeyDown for {this}");
             OnKeyDown(e);
+            UIController.Log($"Children of {this}:");
+
+            foreach(UIComponent component in ChildComponents)
+            {
+                UIController.Log($"{component}");
+            }
+
             foreach (UIComponent component in ChildComponents)
             {
+                UIController.Log($"Calling FireKeyDown for {component}");
                 component.FireKeyDown(e);
             }
         }
@@ -163,6 +173,12 @@ namespace GTAUI
         {
             component.Parent = this;
             ChildComponents.Add(component);
+        }
+
+        public UIComponent Register()
+        {
+            UIController.instance.AddComponent(this);
+            return this;
         }
 
         public PointF GetActualPosition(PointF position)

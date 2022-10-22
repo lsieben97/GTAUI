@@ -30,7 +30,6 @@ namespace GTAUI.Screens
             Acccepted = acccepted;
             Canceled = canceled;
 
-            AlwaysOnTop = true;
             NeedsGameControlsDisabled = true;
         }
 
