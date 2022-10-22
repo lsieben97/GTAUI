@@ -11,6 +11,10 @@ using System.Windows.Forms;
 
 namespace GTAUI.Screens
 {
+    /// <summary>
+    /// Full screen input dialog with a customizable prompt and message.
+    /// Call <see cref="UIComponent.Show"/> to display the dialog.
+    /// </summary>
     public class InputScreen : UIComponent
     {
         private const int INPUT_BOX_WIDTH = 1000;
@@ -27,14 +31,38 @@ namespace GTAUI.Screens
 
         private EditableText editableText;
 
+        /// <summary>
+        /// The prompt of the dialog.
+        /// </summary>
         public string Prompt { get; }
+
+        /// <summary>
+        /// The message of the dialog.
+        /// </summary>
         public string Message { get; }
+
+        /// <summary>
+        /// <c>true</c> when a help text indicating what keys the user can press to accept and cancel the dialog must be shown when the dialog is visible.
+        /// </summary>
         public bool ShowHelpText { get; set; }
 
+        /// <summary>
+        /// Action to execute when the user accepts the entered input.
+        /// </summary>
         public Action<string> InputEntered { get; set; }
+
+        /// <summary>
+        /// Action to execute when the user cancels the dialog.
+        /// </summary>
         public Action InputCanceled { get; set; }
 
-
+        /// <summary>
+        /// Create a new input dialog with the given parameters
+        /// </summary>
+        /// <param name="prompt">The prompt of the dialog.</param>
+        /// <param name="message">The message of the dialog.</param>
+        /// <param name="inputEntered">Action to execute when the user accepts the entered input.</param>
+        /// <param name="inputCanceled">Action to execute when the user cancels the dialog.</param>
         public InputScreen(string prompt, string message, Action<string> inputEntered, Action inputCanceled)
         {
             Prompt = prompt;
@@ -44,6 +72,12 @@ namespace GTAUI.Screens
             NeedsGameControlsDisabled = true;
         }
 
+        /// <summary>
+        /// Create a new input dialog with the given parameters
+        /// </summary>
+        /// <param name="prompt">The prompt of the dialog.</param>
+        /// <param name="message">The message of the dialog.</param>
+        /// <param name="inputEntered">Action to execute when the user accepts the entered input.</param>
         public InputScreen(string prompt, string message, Action<string> inputEntered) : this(prompt, message, inputEntered, null)
         {
         }
@@ -80,7 +114,7 @@ namespace GTAUI.Screens
             descriptionText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - descriptionText.Width / 2, 400);
             promptText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - promptText.Width / 2, 300);
 
-            editableText = new EditableText(new PointF(inputBoxOrigin + 2, 452), string.Empty, 0.4f, Color.White);
+            editableText = new EditableText(new PointF(inputBoxOrigin + 2, 452));
             AddChildComponent(editableText);
         }
 

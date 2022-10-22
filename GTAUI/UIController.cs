@@ -13,10 +13,19 @@ using System.Windows.Forms;
 
 namespace GTAUI
 {
+    /// <summary>
+    /// This class controlls all UI displayed via GTAUI.
+    /// It's <see cref="OnTick"/>, <see cref="OnKeyDown(KeyEventArgs)"/> and <see cref="OnKeyUp(KeyEventArgs)"/> methods should be called when the parent <see cref="Script"/> object receives the same events.
+    /// To Actually use this class, Create an instance of any class inheriting from <see cref="UIComponent"/> and call <see cref="UIComponent.Register"/>.
+    /// Note: Some objects also require to call the <see cref="UIComponent.Show"/> method.
+    /// </summary>
     public class UIController
     {
         internal static UIController instance { get; set; }
 
+        /// <summary>
+        /// Get the current screensize.
+        /// </summary>
         public Size ScreenSize { get => GTA.UI.Screen.Resolution; }
 
         private bool isInitialized = false;
@@ -30,13 +39,16 @@ namespace GTAUI
         private bool disableGameControl = false;
         private int gameControlDisabledDelayCounter = 0;
         private bool showCursor = false;
-        private ScaledText TEMP_debugText;
-        private ScaledRectangle TEMP_debugRectangle;
         private float previousMouseX = 0;
         private float previousMouseY = 0;
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
 
+        /// <summary>
+        /// Get the current instance of UIController.
+        /// </summary>
+        /// <returns>The current instance of UIController.</returns>
+        /// <exception cref="Exception">When no instance has been created.</exception>
         public UIController GetInstance()
         {
             if (instance == null)
@@ -47,6 +59,11 @@ namespace GTAUI
             return instance;
         }
 
+        /// <summary>
+        /// Create a new instance of UIController.
+        /// You can only create one instance of this class.
+        /// </summary>
+        /// <exception cref="Exception">When an instance already exists.</exception>
         public UIController()
         {
             if (instance == null)
@@ -59,6 +76,9 @@ namespace GTAUI
             }
         }
 
+       /// <summary>
+       /// Initialize the UIController.
+       /// </summary>
         public void Initialize()
         {
             if(File.Exists("GTAUI.log"))
@@ -72,14 +92,11 @@ namespace GTAUI
             componentsToRemove = new List<UIComponent>();
 
             isInitialized = true;
-            TEMP_debugText = new ScaledText(new PointF(50, 50), "");
-            TEMP_debugText.Color = Color.Red;
-            TEMP_debugText.Scale = 0.5f;
-
-            TEMP_debugRectangle = new ScaledRectangle(new PointF(), new SizeF(10, 10));
-            TEMP_debugRectangle.Color = Color.Green;
         }
 
+        /// <summary>
+        /// Method to be called on every tick.
+        /// </summary>
         public void OnTick()
         {
             if (Game.IsLoading == true || isInitialized == false)
@@ -235,6 +252,10 @@ namespace GTAUI
             }
         }
 
+        /// <summary>
+        /// Method to be called when a key is pushed down.
+        /// </summary>
+        /// <param name="e">The event arguments</param>
         public void OnKeyDown(KeyEventArgs e)
         {
             UIController.Log($"Receiving key down event for UIController {e.KeyCode}");
@@ -246,6 +267,10 @@ namespace GTAUI
             isIterating = false;
         }
 
+        /// <summary>
+        /// Method to be called when a key is lifted up.
+        /// </summary>
+        /// <param name="e">The event arguments.</param>
         public void OnKeyUp(KeyEventArgs e)
         { 
             isIterating = true;
@@ -283,6 +308,11 @@ namespace GTAUI
             }
         }
 
+        /// <summary>
+        /// Add a component to the component list handeled by the UIController.
+        /// Calling this method is no guarantee that the given component will be added. If the coltroller is currently iterating over all components, the given component will be added next frame (game tick).
+        /// </summary>
+        /// <param name="component">The component to add</param>
         public void AddComponent(UIComponent component)
         {
             if (isIterating)
@@ -295,6 +325,11 @@ namespace GTAUI
             }
         }
 
+        /// <summary>
+        /// Remove a component from the component list handeled by the UIController.
+        /// Calling this method is no guarantee that the given component will be removed. If the coltroller is currently iterating over all components, the given component will be removed next frame (game tick).
+        /// </summary>
+        /// <param name="component">The component to add</param>
         public void RemoveComponent(UIComponent component)
         {
             if (isIterating)
@@ -307,6 +342,11 @@ namespace GTAUI
             }
         }
 
+        /// <summary>
+        /// Register all embeded resources the given assembly has inside.
+        /// This allows you to refer to the resources inside for menu and style definitions.
+        /// </summary>
+        /// <param name="assembly"></param>
         public void RegisterAssemblyResources(Assembly assembly)
         {
             if (assemblyResources.ContainsKey(assembly))
