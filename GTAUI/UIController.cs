@@ -183,26 +183,28 @@ namespace GTAUI
 
                 component.FireUpdate();
 
-
-                if (shouldFireMouseMove)
+                if (component.Visible || component.AlwaysNeedsInput)
                 {
-                    component.FireMouseMove(new PointF(actualX, actualY));
-                }
-
-                if (shouldFireMouseButtons)
-                {
-                    component.FireMouseButtonDown(actualMouseButtons);
-                }
-
-                if (shouldFireMouseScroll)
-                {
-                    if (cursorScrollDown > 0)
+                    if (shouldFireMouseMove)
                     {
-                        component.FireMouseScroll(ScrollDirection.Down);
+                        component.FireMouseMove(new PointF(actualX, actualY));
                     }
-                    else
+
+                    if (shouldFireMouseButtons)
                     {
-                        component.FireMouseScroll(ScrollDirection.Up);
+                        component.FireMouseButtonDown(actualMouseButtons);
+                    }
+
+                    if (shouldFireMouseScroll)
+                    {
+                        if (cursorScrollDown > 0)
+                        {
+                            component.FireMouseScroll(ScrollDirection.Down);
+                        }
+                        else
+                        {
+                            component.FireMouseScroll(ScrollDirection.Up);
+                        }
                     }
                 }
 
@@ -261,7 +263,11 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                component.FireKeyDown(e);
+                if (component.Visible || component.AlwaysNeedsInput)
+                {
+                    component.FireKeyDown(e);
+                }
+                
             }
             isIterating = false;
         }
@@ -275,36 +281,12 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                component.FireKeyUp(e);
+                if (component.Visible || component.AlwaysNeedsInput)
+                {
+                    component.FireKeyUp(e);
+                }
             }
             isIterating = false;
-
-            if (e.KeyCode == Keys.Pause)
-            {
-                if (disableGameControl)
-                {
-                    disableGameControl = false;
-                    GTA.UI.Notification.Show("Enable game control");
-                }
-                else
-                {
-                    disableGameControl = true;
-                    GTA.UI.Notification.Show("Disable game control");
-                }
-            }
-            else if (e.KeyCode == Keys.NumPad0)
-            {
-                if (showCursor)
-                {
-                    showCursor = false;
-                    GTA.UI.Notification.Show("Enable cursor");
-                }
-                else
-                {
-                    showCursor = true;
-                    GTA.UI.Notification.Show("Disable cursor");
-                }
-            }
         }
 
         /// <summary>

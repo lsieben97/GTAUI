@@ -35,13 +35,13 @@ namespace GTAUI
         public bool IsFullScreen { get; set; } = false;
 
         /// <summary>
-        /// <c>true</c> when the component needs all game controls to be disabled as long as the component is visible. WIll be taken care of by the <see cref="UIController"/>.
+        /// <c>true</c> when the component needs all game controls to be disabled as long as the component is visible. Will be taken care of by the <see cref="UIController"/>.
         /// </summary>
         public bool NeedsGameControlsDisabled { get; set; } = false;
 
         /// <summary>
         /// <c>true</c> if the component needs the mouse cursor to be visible as long as the component is visible. Will be taken care off by the <see cref="UIController"/>.
-        /// Note: mouse events will still be fired even if the mouse cursor is invisible.
+        /// Note: mouse events will still be fired even if the mouse cursor is invisible. (as long as the component is visible)
         /// </summary>
         public bool NeedsVisibleMouseCursor { get; set; } = false;
 
@@ -49,6 +49,11 @@ namespace GTAUI
         /// <c>true</c> if the component has focus. Not used by the <see cref="UIController"/> but handy for determining wether the component needs to handle keyboard and mouse events.
         /// </summary>
         public bool HasFocus { get; set; }
+
+        /// <summary>
+        /// <c>true</c> if the component always needs mouse and keyboard input events sent to is, even if it's not visible.
+        /// </summary>
+        public bool AlwaysNeedsInput { get; set; } = false;
 
         internal bool IsDisposed { get; set; } = false;
 
