@@ -258,7 +258,6 @@ namespace GTAUI
         /// <param name="e">The event arguments</param>
         public void OnKeyDown(KeyEventArgs e)
         {
-            UIController.Log($"Receiving key down event for UIController {e.KeyCode}");
             isIterating = true;
             foreach (UIComponent component in components)
             {

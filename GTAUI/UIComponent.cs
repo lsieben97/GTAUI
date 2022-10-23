@@ -75,18 +75,10 @@ namespace GTAUI
 
         internal void FireKeyDown(KeyEventArgs e)
         {
-            UIController.Log($"Firing OnKeyDown for {this}");
             OnKeyDown(e);
-            UIController.Log($"Children of {this}:");
-
-            foreach(UIComponent component in ChildComponents)
-            {
-                UIController.Log($"{component}");
-            }
 
             foreach (UIComponent component in ChildComponents)
-            {
-                UIController.Log($"Calling FireKeyDown for {component}");
+            { 
                 component.FireKeyDown(e);
             }
         }

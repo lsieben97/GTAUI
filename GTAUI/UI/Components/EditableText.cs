@@ -125,8 +125,6 @@ namespace GTAUI.UI.Components
                 return;
             }
 
-            UIController.Log($"Receiving key down event for EditableText {e.KeyCode}");
-            UIController.Log(Environment.StackTrace);
             if (e.KeyCode == Keys.Back)
             {
                 if (currentCursorIndex - 1>= 0)
@@ -142,7 +140,7 @@ namespace GTAUI.UI.Components
             {
                 if (currentCursorIndex != Text.Length)
                 {
-                    Text = Text.Substring(0, Text.Length - 1);
+                    Text = Text.Remove(currentCursorIndex, 1);
                     showCursor = false;
                     blinkDelay = 0;
                 }
@@ -204,7 +202,6 @@ namespace GTAUI.UI.Components
                 else
                 {
                     displayText = new string(Text.ToArray());
-                    //displayText = displayText.Remove(currentCursorIndex, 1);
                     displayText = displayText.Insert(currentCursorIndex, "|");
                 }
             }
@@ -217,7 +214,6 @@ namespace GTAUI.UI.Components
                 else
                 {
                     displayText = new string(Text.ToArray());
-                    //displayText = displayText.Remove(currentCursorIndex, 1);
                     displayText = displayText.Insert(currentCursorIndex, " ");
                 }
             }
