@@ -51,7 +51,7 @@ namespace GTAUI
         public bool HasFocus { get; set; }
 
         /// <summary>
-        /// <c>true</c> if the component always needs mouse and keyboard input events sent to is, even if it's not visible.
+        /// <c>true</c> if the component always needs mouse and keyboard input events sent to it, even if it's not visible.
         /// </summary>
         public bool AlwaysNeedsInput { get; set; } = false;
 

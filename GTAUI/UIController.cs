@@ -1,4 +1,5 @@
 ﻿using GTA;
+using GTAUI.Styling;
 using LemonUI;
 using LemonUI.Elements;
 using System;
@@ -76,20 +77,32 @@ namespace GTAUI
             }
         }
 
-       /// <summary>
-       /// Initialize the UIController.
-       /// </summary>
+        /// <summary>
+        /// Initialize the UIController.
+        /// </summary>
         public void Initialize()
         {
-            if(File.Exists("GTAUI.log"))
+            if (File.Exists("GTAUI.log"))
             {
                 File.Delete("GTAUI.log");
             }
+
+            System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             components = new List<UIComponent>();
             assemblyResources = new Dictionary<Assembly, string[]>();
             componentsToAdd = new List<UIComponent>();
             componentsToRemove = new List<UIComponent>();
+
+            RegisterAssemblyResources(Assembly.GetExecutingAssembly());
+
+            UIStyle.GetInstance().RegisterStylingProperties("GTAUI.resources.builtinStyleProperties.json");
+            UIStyle.GetInstance().DumpStyleProperties();
+            Log($"float value: {UIStyle.GetInstance().GetStyleProperty<float>("floatTest")}");
+
+            UIStyle.GetInstance().ApplyStyle("GTAUI.resources.lightStyle.json");
+            UIStyle.GetInstance().DumpStyleProperties();
 
             isInitialized = true;
         }
@@ -106,7 +119,7 @@ namespace GTAUI
 
             if (isIterating == false)
             {
-                foreach(UIComponent component in componentsToRemove)
+                foreach (UIComponent component in componentsToRemove)
                 {
                     components.Remove(component);
                 }
@@ -267,7 +280,7 @@ namespace GTAUI
                 {
                     component.FireKeyDown(e);
                 }
-                
+
             }
             isIterating = false;
         }
@@ -277,7 +290,7 @@ namespace GTAUI
         /// </summary>
         /// <param name="e">The event arguments.</param>
         public void OnKeyUp(KeyEventArgs e)
-        { 
+        {
             isIterating = true;
             foreach (UIComponent component in components)
             {
@@ -337,6 +350,56 @@ namespace GTAUI
             string[] resources = assembly.GetManifestResourceNames();
             Log($"Registering the following resources from {assembly}:\n {string.Join("\n", resources)}");
             assemblyResources.Add(assembly, resources);
+        }
+
+        /// <summary>
+        /// Get a resource fron any of the assemblies registered with <see cref="RegisterAssemblyResources(Assembly)"/> or from the fle system if no embedded resource can be found.
+        /// </summary>
+        /// <param name="path">The name if it's an embeddable resource or path if it's from the file system.</param>
+        /// <returns>The text contents of the resource or null if the resource could not be found.</returns>
+        public string GetUIResource(string path)
+        {
+            foreach (KeyValuePair<Assembly, string[]> assembly in assemblyResources)
+            {
+                if (assembly.Value.Contains(path))
+                {
+                    try
+                    {
+                        Stream resourceStream = assembly.Key.GetManifestResourceStream(path);
+                        if (resourceStream == null)
+                        {
+                            return null;
+                        }
+
+                        using (StreamReader reader = new StreamReader(resourceStream))
+                        {
+                            return reader.ReadToEnd();
+                        }
+
+                    }
+                    catch (Exception ex)
+                    {
+                        Log($"Error while getting UI resource '{path}': {ex}");
+                        return null;
+                    }
+
+                }
+            }
+
+            try
+            {
+                if (File.Exists(path) == false)
+                {
+                    return null;
+                }
+                
+                return File.ReadAllText(path);
+            }
+            catch(Exception ex)
+            {
+                Log($"Error while getting UI resource fromn file '{path}': {ex}");
+                return null;
+            }
         }
 
         private void DisableGameControl()

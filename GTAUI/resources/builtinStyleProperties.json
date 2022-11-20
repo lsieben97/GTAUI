@@ -1,0 +1,238 @@
+﻿[
+  {
+    "Name": "gtaui.alertScreen.backgroundColor",
+    "Type": "color",
+    "Default": "#000000"
+  },
+  {
+    "Name": "gtaui.alertScreen.promptYPosition",
+    "Type": "int",
+    "Default": 300
+  },
+  {
+    "Name": "gtaui.alertScreen.promptFont",
+    "Type": "font",
+    "Default": "Pricedown"
+  },
+  {
+    "Name": "gtaui.alertScreen.promptFontSize",
+    "Type": "float",
+    "Default": 1.5
+  },
+  {
+    "Name": "gtaui.alertScreen.promptColor",
+    "Type": "color",
+    "Default": "#f0c850"
+  },
+  {
+    "Name": "gtaui.alertScreen.descriptionYPosition",
+    "Type": "int",
+    "Default": 400
+  },
+  {
+    "Name": "gtaui.alertScreen.descriptionFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.alertScreen.descriptionFontSize",
+    "Type": "float",
+    "Default": 0.4
+  },
+  {
+    "Name": "gtaui.alertScreen.descriptionColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.alertScreen.helpTextOffset",
+    "Type": "point",
+    "Default": "30,30"
+  },
+  {
+    "Name": "gtaui.alertScreen.helpTextFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.alertScreen.helpTextFontSize",
+    "Type": "float",
+    "Default": 0.345
+  },
+  {
+    "Name": "gtaui.alertScreen.helpTextColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.alertScreen.helpTextText",
+    "Type": "string",
+    "Default": "Press [Enter] to accept, [Escape] to cancel"
+  },
+  {
+    "Name": "gtaui.progressScreen.backgroundColor",
+    "Type": "color",
+    "Default": "#000000"
+  },
+  {
+    "Name": "gtaui.progressScreen.promptYPosition",
+    "Type": "int",
+    "Default": 300
+  },
+  {
+    "Name": "gtaui.progressScreen.promptFont",
+    "Type": "font",
+    "Default": "Pricedown"
+  },
+  {
+    "Name": "gtaui.progressScreen.promptFontSize",
+    "Type": "float",
+    "Default": 1.5
+  },
+  {
+    "Name": "gtaui.progressScreen.promptColor",
+    "Type": "color",
+    "Default": "#f0c850"
+  },
+  {
+    "Name": "gtaui.progressScreen.descriptionYPosition",
+    "Type": "int",
+    "Default": 400
+  },
+  {
+    "Name": "gtaui.progressScreen.descriptionFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.progressScreen.descriptionFontSize",
+    "Type": "float",
+    "Default": 0.4
+  },
+  {
+    "Name": "gtaui.progressScreen.descriptionColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.progressScreen.progressRectangleYposition",
+    "Type": "int",
+    "Default": 480
+  },
+  {
+    "Name": "gtaui.progressScreen.progressRectangleSize",
+    "Type": "point",
+    "Default": "1500,12"
+  },
+  {
+    "Name": "gtaui.progressScreen.progressRectangleColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.inputScreen.backgroundColor",
+    "Type": "color",
+    "Default": "#000000"
+  },
+  {
+    "Name": "gtaui.inputScreen.promptYPosition",
+    "Type": "int",
+    "Default": 300
+  },
+  {
+    "Name": "gtaui.inputScreen.promptFont",
+    "Type": "font",
+    "Default": "Pricedown"
+  },
+  {
+    "Name": "gtaui.inputScreen.promptFontSize",
+    "Type": "float",
+    "Default": 1.5
+  },
+  {
+    "Name": "gtaui.inputScreen.promptColor",
+    "Type": "color",
+    "Default": "#f0c850"
+  },
+  {
+    "Name": "gtaui.inputScreen.descriptionYPosition",
+    "Type": "int",
+    "Default": 400
+  },
+  {
+    "Name": "gtaui.inputScreen.descriptionFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.inputScreen.descriptionFontSize",
+    "Type": "float",
+    "Default": 0.4
+  },
+  {
+    "Name": "gtaui.inputScreen.descriptionColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.inputScreen.helpTextOffset",
+    "Type": "point",
+    "Default": "30,30"
+  },
+  {
+    "Name": "gtaui.inputScreen.helpTextFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.inputScreen.helpTextFontSize",
+    "Type": "float",
+    "Default": 0.345
+  },
+  {
+    "Name": "gtaui.inputScreen.helpTextColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.inputScreen.helpTextText",
+    "Type": "string",
+    "Default": "Press [Enter] to accept, [Escape] to cancel"
+  },
+  {
+    "Name": "gtaui.inputScreen.inputBoxColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  },
+  {
+    "Name": "gtaui.inputScreen.inputBoxYOffset",
+    "Type": "int",
+    "Default": 450
+  },
+  {
+    "Name": "gtaui.inputScreen.inputBoxBorderThickness",
+    "Type": "int",
+    "Default": 3
+  },
+  {
+    "Name": "gtaui.inputScreen.inputBoxSize",
+    "Type": "point",
+    "Default": "1000,50"
+  },
+  {
+    "Name": "gtaui.inputScreen.inputTextFont",
+    "Type": "font",
+    "Default": "ChaletLondon"
+  },
+  {
+    "Name": "gtaui.inputScreen.inputTextFontSize",
+    "Type": "float",
+    "Default": 0.4
+  },
+  {
+    "Name": "gtaui.inputScreen.inputTextColor",
+    "Type": "color",
+    "Default": "#ffffff"
+  }
+
+]

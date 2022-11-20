@@ -1,4 +1,5 @@
-﻿using LemonUI.Elements;
+﻿using GTAUI.Styling;
+using LemonUI.Elements;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -15,13 +16,14 @@ namespace GTAUI.Screens
     /// </summary>
     public class ProgressScreen : UIComponent
     {
-        private const int PROGRESS_WIDTH = 1500;
-        private const int PROGRESS_HEIGHT = 12;
 
+        private UIStyle uiStyle = UIStyle.GetInstance();
         private ScaledRectangle backgroundRectangle;
         private ScaledText promptText;
         private ScaledText descriptionText;
         private ScaledRectangle progressRectangle;
+        private Point progressRectangleSize;
+        private int progressRectangleYPosition;
 
         /// <summary>
         /// The maximum amount of progress can be set with <see cref="SetProgress(int)"/>. Minimum is always 0.
@@ -67,19 +69,35 @@ namespace GTAUI.Screens
 
         protected override void OnInitialize()
         {
-            promptText = new ScaledText(new PointF(), Prompt, 1.5f, GTA.UI.Font.Pricedown);
-            promptText.Color = Color.FromArgb(240, 200, 80);
+            float promptFontSize = uiStyle.GetStyleProperty<float>("gtaui.progressScreen.promptFontSize");
+            GTA.UI.Font promptFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.progressScreen.promptFont");
+            Color promptColor = uiStyle.GetStyleProperty<Color>("gtaui.progressScreen.promptColor");
+            int promptYPosition = uiStyle.GetStyleProperty<int>("gtaui.progressScreen.promptYPosition");
 
-            descriptionText = new ScaledText(new PointF(), Message, 0.4f, GTA.UI.Font.ChaletLondon);
+            float descriptionFontSize = uiStyle.GetStyleProperty<float>("gtaui.progressScreen.descriptionFontSize");
+            GTA.UI.Font descriptionFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.progressScreen.descriptionFont");
+            Color descriptionColor = uiStyle.GetStyleProperty<Color>("gtaui.progressScreen.descriptionColor");
+            int descriptionYPosition = uiStyle.GetStyleProperty<int>("gtaui.progressScreen.descriptionYPosition");
+
+            progressRectangleSize = uiStyle.GetStyleProperty<Point>("gtaui.progressScreen.progressRectangleSize");
+            progressRectangleYPosition = uiStyle.GetStyleProperty<int>("gtaui.progressScreen.progressRectangleYposition");
+
+            promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
+            promptText.Color = promptColor;
+            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+
+            descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
+            descriptionText.Color = descriptionColor;
+            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
 
             backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
-            backgroundRectangle.Color = Color.Black;
+            backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.progressScreen.backgroundColor");
 
             progressRectangle = new ScaledRectangle(new PointF(), new SizeF());
+            progressRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.progressScreen.progressRectangleColor");
+            progressRectangle.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - progressRectangleSize.X / 2, progressRectangleYPosition);
 
-            descriptionText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - descriptionText.Width / 2, 400);
-            promptText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - promptText.Width / 2, 300);
-            progressRectangle.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - PROGRESS_WIDTH / 2, 480);
+
         }
 
         /// <summary>
@@ -99,7 +117,7 @@ namespace GTAUI.Screens
             }
 
             CurrentProgress = progress;
-            progressRectangle.Size = new SizeF(PROGRESS_WIDTH / Maximum * progress, PROGRESS_HEIGHT);
+            progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * progress, progressRectangleSize.Y);
         }
 
         /// <summary>
@@ -113,7 +131,7 @@ namespace GTAUI.Screens
                 maximum = 1;
             }
             Maximum = maximum;
-            progressRectangle.Size = new SizeF(PROGRESS_WIDTH / Maximum * CurrentProgress, PROGRESS_HEIGHT);
+            progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * CurrentProgress, progressRectangleSize.Y);
         }
 
         /// <summary>

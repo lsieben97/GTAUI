@@ -1,4 +1,5 @@
 ﻿using GTA.UI;
+using GTAUI.Styling;
 using GTAUI.UI.Components;
 using LemonUI.Elements;
 using System;
@@ -19,6 +20,8 @@ namespace GTAUI.Screens
     {
         private const int INPUT_BOX_WIDTH = 1000;
         private const int INPUT_BOX_HEIGHT = 50;
+
+        private UIStyle uiStyle = UIStyle.GetInstance();
 
         private ScaledRectangle backgroundRectangle;
         private ScaledRectangle topBorderRectangle;
@@ -86,35 +89,59 @@ namespace GTAUI.Screens
         {
             base.OnInitialize();
 
-            promptText = new ScaledText(new PointF(), string.Empty, 1.5f, GTA.UI.Font.Pricedown);
-            promptText.Color = Color.FromArgb(240, 200, 80);
+            float promptFontSize = uiStyle.GetStyleProperty<float>("gtaui.inputScreen.promptFontSize");
+            GTA.UI.Font promptFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.inputScreen.promptFont");
+            Color promptColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.promptColor");
+            int promptYPosition = uiStyle.GetStyleProperty<int>("gtaui.inputScreen.promptYPosition");
 
-            descriptionText = new ScaledText(new PointF(), string.Empty, 0.4f, GTA.UI.Font.ChaletLondon);
+            float descriptionFontSize = uiStyle.GetStyleProperty<float>("gtaui.inputScreen.descriptionFontSize");
+            GTA.UI.Font descriptionFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.inputScreen.descriptionFont");
+            Color descriptionColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.descriptionColor");
+            int descriptionYPosition = uiStyle.GetStyleProperty<int>("gtaui.inputScreen.descriptionYPosition");
 
-            buttonHelpText = new ScaledText(new PointF(), "Press [Enter] to confirm input, [Escape] to cancel", 0.345f, GTA.UI.Font.ChaletLondon);
+            float helpTextFontSize = uiStyle.GetStyleProperty<float>("gtaui.inputScreen.helpTextFontSize");
+            GTA.UI.Font helpTextFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.inputScreen.helpTextFont");
+            Color helpTextColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.helpTextColor");
+            Point helpTextOffset = uiStyle.GetStyleProperty<Point>("gtaui.inputScreen.helpTextOffset");
+            string helptTextText = uiStyle.GetStyleProperty<string>("gtaui.inputScreen.helpTextText");
+
+            Color inputBoxColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.inputBoxColor");
+            int inputBoxYOffset = uiStyle.GetStyleProperty<int>("gtaui.inputScreen.inputBoxYOffset");
+            int inputBoxBorderThickness = uiStyle.GetStyleProperty<int>("gtaui.inputScreen.inputBoxBorderThickness");
+            Point inputBoxSize = uiStyle.GetStyleProperty<Point>("gtaui.inputScreen.inputBoxSize");
+
+            float inputTextFontSize = uiStyle.GetStyleProperty<float>("gtaui.inputScreen.inputTextFontSize");
+            GTA.UI.Font inputTextFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.inputScreen.inputTextFont");
+            Color inputTextColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.inputTextColor");
+
+            promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
+            promptText.Color = promptColor;
+            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+
+            descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
+            descriptionText.Color = descriptionColor;
+            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
+
+            buttonHelpText = new ScaledText(new PointF(), helptTextText, helpTextFontSize, helpTextFont);
             buttonHelpText.Alignment = Alignment.Right;
-            buttonHelpText.Position = new PointF(GTA.UI.Screen.Resolution.Width - 30, GTA.UI.Screen.Resolution.Height - (30 + buttonHelpText.LineHeight));
+            buttonHelpText.Color = helpTextColor;
+            buttonHelpText.Position = new PointF(UIController.instance.ScreenSize.Width - helpTextOffset.X, UIController.instance.ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
 
-            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(GTA.UI.Screen.Resolution.Width, GTA.UI.Screen.Resolution.Height));
-            backgroundRectangle.Color = Color.Black;
+            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
+            backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.backgroundColor");
 
-            float inputBoxOrigin = GTA.UI.Screen.Resolution.Width / 2 - INPUT_BOX_WIDTH / 2;
-            topBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, 450), new SizeF(INPUT_BOX_WIDTH, 3));
-            leftBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, 450), new SizeF(3, INPUT_BOX_HEIGHT));
-            bottomBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, 450 + INPUT_BOX_HEIGHT), new SizeF(INPUT_BOX_WIDTH, 3));
-            rightBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin + INPUT_BOX_WIDTH, 450), new SizeF(3, INPUT_BOX_HEIGHT));
+            float inputBoxOrigin = GTA.UI.Screen.Resolution.Width / 2 - inputBoxSize.X / 2;
+            topBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, inputBoxYOffset), new SizeF(inputBoxSize.X, inputBoxBorderThickness));
+            leftBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, inputBoxYOffset), new SizeF(inputBoxBorderThickness, inputBoxSize.Y));
+            bottomBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin, inputBoxYOffset + inputBoxSize.Y), new SizeF(inputBoxSize.X, inputBoxBorderThickness));
+            rightBorderRectangle = new ScaledRectangle(new PointF(inputBoxOrigin + inputBoxSize.X, inputBoxYOffset), new SizeF(inputBoxBorderThickness, inputBoxSize.Y));
 
-            topBorderRectangle.Color = Color.White;
-            leftBorderRectangle.Color = Color.White;
-            bottomBorderRectangle.Color = Color.White;
-            rightBorderRectangle.Color = Color.White;
+            topBorderRectangle.Color = inputBoxColor;
+            leftBorderRectangle.Color = inputBoxColor;
+            bottomBorderRectangle.Color = inputBoxColor;
+            rightBorderRectangle.Color = inputBoxColor;
 
-            promptText.Text = Prompt;
-            descriptionText.Text = Message;
-            descriptionText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - descriptionText.Width / 2, 400);
-            promptText.Position = new PointF(GTA.UI.Screen.Resolution.Width / 2 - promptText.Width / 2, 300);
-
-            editableText = new EditableText(new PointF(inputBoxOrigin + 2, 452));
+            editableText = new EditableText(new PointF(inputBoxOrigin + inputBoxBorderThickness - 1, inputBoxYOffset + inputBoxBorderThickness - 1), string.Empty, inputTextFontSize, inputTextColor, inputTextFont);
             AddChildComponent(editableText);
         }
 
@@ -138,9 +165,7 @@ namespace GTAUI.Screens
                 editableText.HasFocus = false;
                 Dispose();
                 InputEntered?.Invoke(editableText.Text);
-                
             }
-
         }
 
         protected override void Render()
@@ -153,7 +178,6 @@ namespace GTAUI.Screens
             leftBorderRectangle.Draw();
             bottomBorderRectangle.Draw();
             rightBorderRectangle.Draw();
-
 
             if (ShowHelpText == true)
             {

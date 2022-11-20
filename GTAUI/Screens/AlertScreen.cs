@@ -1,4 +1,5 @@
 ﻿using GTA.UI;
+using GTAUI.Styling;
 using LemonUI.Elements;
 using System;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ namespace GTAUI.Screens
     /// </summary>
     public class AlertScreen : UIComponent
     {
+        private UIStyle uiStyle = UIStyle.GetInstance();
         private ScaledRectangle backgroundRectangle;
         private ScaledText promptText;
         private ScaledText buttonHelpText;
@@ -84,22 +86,37 @@ namespace GTAUI.Screens
 
         protected override void OnInitialize()
         {
-            promptText = new ScaledText(new PointF(), Prompt, 1.5f, GTA.UI.Font.Pricedown);
-            promptText.Color = Color.FromArgb(240, 200, 80);
+            float promptFontSize = uiStyle.GetStyleProperty<float>("gtaui.alertScreen.promptFontSize");
+            GTA.UI.Font promptFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.alertScreen.promptFont");
+            Color promptColor = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.promptColor");
+            int promptYPosition = uiStyle.GetStyleProperty<int>("gtaui.alertScreen.promptYPosition");
 
-            descriptionText = new ScaledText(new PointF(), Message, 0.4f, GTA.UI.Font.ChaletLondon);
+            float descriptionFontSize = uiStyle.GetStyleProperty<float>("gtaui.alertScreen.descriptionFontSize");
+            GTA.UI.Font descriptionFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.alertScreen.descriptionFont");
+            Color descriptionColor = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.descriptionColor");
+            int descriptionYPosition = uiStyle.GetStyleProperty<int>("gtaui.alertScreen.descriptionYPosition");
 
-            buttonHelpText = new ScaledText(new PointF(), "Press [Enter] to accept, [Escape] to cancel", 0.345f, GTA.UI.Font.ChaletLondon);
+            float helpTextFontSize = uiStyle.GetStyleProperty<float>("gtaui.alertScreen.helpTextFontSize");
+            GTA.UI.Font helpTextFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.alertScreen.helpTextFont");
+            Color helpTextColor = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.helpTextColor");
+            Point helpTextOffset = uiStyle.GetStyleProperty<Point>("gtaui.alertScreen.helpTextOffset");
+            string helptTextText = uiStyle.GetStyleProperty<string>("gtaui.alertScreen.helpTextText");
+
+            promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
+            promptText.Color = promptColor;
+            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+
+            descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
+            descriptionText.Color = descriptionColor;
+            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
+
+            buttonHelpText = new ScaledText(new PointF(), helptTextText, helpTextFontSize, helpTextFont);
             buttonHelpText.Alignment = Alignment.Right;
-            buttonHelpText.Position = new PointF(UIController.instance.ScreenSize.Width - 30, UIController.instance.ScreenSize.Height - (30 + buttonHelpText.LineHeight));
+            buttonHelpText.Color = helpTextColor;
+            buttonHelpText.Position = new PointF(UIController.instance.ScreenSize.Width - helpTextOffset.X, UIController.instance.ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
 
             backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
-            backgroundRectangle.Color = Color.Black;
-
-
-
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, 300);
+            backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.backgroundColor");
         }
 
         /// <summary>
