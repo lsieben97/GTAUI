@@ -126,6 +126,9 @@ namespace GTAUI.Styling
             return (T)propertyObject.ActualValue;
         }
 
+        /// <summary>
+        /// Dump all registered style properties and their values to the GTAUI Log file.
+        /// </summary>
         public void DumpStyleProperties()
         {
             StringBuilder builder = new StringBuilder();

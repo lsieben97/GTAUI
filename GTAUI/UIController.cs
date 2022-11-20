@@ -50,7 +50,7 @@ namespace GTAUI
         /// </summary>
         /// <returns>The current instance of UIController.</returns>
         /// <exception cref="Exception">When no instance has been created.</exception>
-        public UIController GetInstance()
+        public static UIController GetInstance()
         {
             if (instance == null)
             {
@@ -58,6 +58,32 @@ namespace GTAUI
             }
 
             return instance;
+        }
+
+        /// <summary>
+        /// Creates an <see cref="UIController"/> instance and connects the required event listeners to the UIController.
+        /// </summary>
+        /// <param name="script">The script the <see cref="UIController"/> needs to connect with.</param>
+        /// <returns>The connected <see cref="UIController"/> instance.</returns>
+        public static UIController Connect(Script script)
+        {
+            UIController controller = new UIController();
+            script.KeyDown += new KeyEventHandler(delegate (object o, KeyEventArgs e)
+            {
+                controller.OnKeyDown(e);
+            });
+            
+            script.KeyUp += new KeyEventHandler(delegate (object o, KeyEventArgs e)
+            {
+                controller.OnKeyUp(e);
+            });
+
+            script.Tick += new EventHandler(delegate (object o, EventArgs _)
+            {
+                controller.OnTick();
+            });
+
+            return controller;
         }
 
         /// <summary>
@@ -96,13 +122,7 @@ namespace GTAUI
             componentsToRemove = new List<UIComponent>();
 
             RegisterAssemblyResources(Assembly.GetExecutingAssembly());
-
             UIStyle.GetInstance().RegisterStylingProperties("GTAUI.resources.builtinStyleProperties.json");
-            UIStyle.GetInstance().DumpStyleProperties();
-            Log($"float value: {UIStyle.GetInstance().GetStyleProperty<float>("floatTest")}");
-
-            UIStyle.GetInstance().ApplyStyle("GTAUI.resources.lightStyle.json");
-            UIStyle.GetInstance().DumpStyleProperties();
 
             isInitialized = true;
         }
