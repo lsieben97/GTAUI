@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -21,6 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -31,7 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <PropertyGroup>
-    <RunPostBuildEvent>Always</RunPostBuildEvent>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="LemonUI.SHVDN3">
@@ -57,6 +58,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Extensions.cs" />
+    <Compile Include="InvokableMethod.cs" />
+    <Compile Include="Menus\IMenuSelectable.cs" />
+    <Compile Include="Menus\JsonMenu.cs" />
+    <Compile Include="Menus\Menu.cs" />
+    <Compile Include="Menus\MenuBuilder.cs" />
+    <Compile Include="Menus\MenuItems\ButtonMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\BackMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\CheckBoxMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\CloseMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\ListMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\MenuItem.cs" />
+    <Compile Include="Menus\MenuItems\SliderMenuItem.cs" />
+    <Compile Include="Menus\MenuItems\SubMenuItem.cs" />
+    <Compile Include="Menus\SelectionMenu.cs" />
+    <Compile Include="ReflectionUtils.cs" />
     <Compile Include="Screens\AlertScreen.cs" />
     <Compile Include="Screens\InputScreen.cs" />
     <Compile Include="Screens\ProgressScreen.cs" />
@@ -67,6 +83,12 @@
     <Compile Include="UIController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="UI\Components\EditableText.cs" />
+    <Compile Include="Json\JsonTypeMapper.cs" />
+    <Compile Include="Json\JsonTypeMapperConverter.cs" />
+    <Compile Include="Json\JsonTypeMapAttribute.cs" />
+    <Compile Include="Menus\MenuItemBadge.cs" />
+    <Compile Include="Utils.cs" />
+    <Compile Include="Menus\MultiSelectionMenu.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="resources\builtinStyleProperties.json" />
@@ -74,6 +96,7 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\lightStyle.json" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>COPY "$(TargetDir)GTAUI.dll" "D:\Games\steamapps\common\Grand Theft Auto V\scripts"

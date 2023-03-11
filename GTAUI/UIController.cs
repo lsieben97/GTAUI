@@ -1,13 +1,18 @@
 ﻿using GTA;
+using GTAUI.Menus;
+using GTAUI.Menus.MenuItems;
 using GTAUI.Styling;
 using LemonUI;
 using LemonUI.Elements;
+using LemonUI.Menus;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Security.AccessControl;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -35,6 +40,9 @@ namespace GTAUI
         private bool isIterating = false;
         private List<UIComponent> componentsToAdd;
         private List<UIComponent> componentsToRemove;
+        private List<Type> availableMenus;
+        private List<NativeMenu> menusToAdd;
+        private List<NativeMenu> menusToRemove;
 
         private bool gameControlWasDisabledLastFrame = false;
         private bool disableGameControl = false;
@@ -44,6 +52,7 @@ namespace GTAUI
         private float previousMouseY = 0;
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
+        private List<NativeMenu> menus = new List<NativeMenu>();
 
         /// <summary>
         /// Get the current instance of UIController.
@@ -62,17 +71,21 @@ namespace GTAUI
 
         /// <summary>
         /// Creates an <see cref="UIController"/> instance and connects the required event listeners to the UIController.
+        /// Also calls <see cref="RegisterAssemblyResources(Assembly)"/> and <see cref="RegisterAssemblyMenus(Assembly)"/> on the assembly where the script is defined. 
         /// </summary>
         /// <param name="script">The script the <see cref="UIController"/> needs to connect with.</param>
         /// <returns>The connected <see cref="UIController"/> instance.</returns>
         public static UIController Connect(Script script)
         {
             UIController controller = new UIController();
+
+            Assembly scriptAssembly = Assembly.GetAssembly(script.GetType());
+
             script.KeyDown += new KeyEventHandler(delegate (object o, KeyEventArgs e)
             {
                 controller.OnKeyDown(e);
             });
-            
+
             script.KeyUp += new KeyEventHandler(delegate (object o, KeyEventArgs e)
             {
                 controller.OnKeyUp(e);
@@ -82,6 +95,12 @@ namespace GTAUI
             {
                 controller.OnTick();
             });
+
+            controller.Initialize();
+
+            controller.RegisterAssemblyResources(scriptAssembly);
+
+            controller.RegisterAssemblyMenus(scriptAssembly);
 
             return controller;
         }
@@ -110,8 +129,17 @@ namespace GTAUI
         {
             if (File.Exists("GTAUI.log"))
             {
-                File.Delete("GTAUI.log");
+                try
+                {
+                    File.Delete("GTAUI.log");
+                }
+                catch (Exception ex)
+                {
+                    Log($"Unable to remove log file: {ex}");
+                }
             }
+
+            Log($"Initializing GTAUI V{Assembly.GetExecutingAssembly().GetName().Version} for GTA V version {Game.Version}.\nUsing LemonUI3 ({Assembly.GetAssembly(typeof(ScaledRectangle)).FullName})\nCurrent screen size: {ScreenSize}");
 
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
@@ -120,11 +148,17 @@ namespace GTAUI
             assemblyResources = new Dictionary<Assembly, string[]>();
             componentsToAdd = new List<UIComponent>();
             componentsToRemove = new List<UIComponent>();
+            availableMenus = new List<Type>();
+            menusToAdd = new List<NativeMenu>();
+            menusToRemove = new List<NativeMenu>();
 
             RegisterAssemblyResources(Assembly.GetExecutingAssembly());
             UIStyle.GetInstance().RegisterStylingProperties("GTAUI.resources.builtinStyleProperties.json");
 
+            RegisterBuiltInJsonTypeMappings();
+
             isInitialized = true;
+            Log("GTAUI initialized");
         }
 
         /// <summary>
@@ -150,6 +184,30 @@ namespace GTAUI
                     components.Add(component);
                 }
                 componentsToAdd.Clear();
+
+                foreach (NativeMenu menu in menusToRemove)
+                {
+                    menus.Remove(menu);
+                }
+                menusToRemove.Clear();
+
+                foreach (NativeMenu menu in menusToAdd)
+                {
+                    menus.Add(menu);
+                    menu.Visible = true;
+                }
+                menusToAdd.Clear();
+            }
+
+            if (menus.Any())
+            {
+                isIterating = true;
+                foreach (NativeMenu menu in menus)
+                {
+                    menu.Process();
+                }
+                isIterating = false;
+                return;
             }
 
             HandleGameControl();
@@ -343,7 +401,7 @@ namespace GTAUI
         /// Remove a component from the component list handeled by the UIController.
         /// Calling this method is no guarantee that the given component will be removed. If the coltroller is currently iterating over all components, the given component will be removed next frame (game tick).
         /// </summary>
-        /// <param name="component">The component to add</param>
+        /// <param name="component">The component to remove</param>
         public void RemoveComponent(UIComponent component)
         {
             if (isIterating)
@@ -412,13 +470,61 @@ namespace GTAUI
                 {
                     return null;
                 }
-                
+
                 return File.ReadAllText(path);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 Log($"Error while getting UI resource fromn file '{path}': {ex}");
                 return null;
+            }
+        }
+
+        public void RegisterAssemblyMenus(Assembly assembly)
+        {
+            List<Type> menuTypes = assembly.GetTypes().Where(t => t.IsSubclassOf(typeof(Menus.Menu)) && t.GetConstructor(Type.EmptyTypes) != null).ToList();
+            availableMenus.AddRange(menuTypes);
+        }
+
+        public ReadOnlyCollection<Type> GetAvailableMenus()
+        {
+            return new ReadOnlyCollection<Type>(availableMenus);
+        }
+
+        public Menus.Menu GetMenuInstance(string name)
+        {
+            Type menuType = availableMenus.Find(t => t.Name == name);
+            if (menuType == null)
+            {
+                return null;
+            }
+
+            return menuType.GetConstructor(Type.EmptyTypes).Invoke(new object[] { }) as Menus.Menu;
+        }
+
+        internal void ShowMenu(NativeMenu menu)
+        {
+            if (isIterating)
+            {
+                menusToAdd.Add(menu);
+            }
+            else
+            {
+                menus.Add(menu);
+                menu.Visible = true;
+            }
+
+        }
+
+        internal void RemoveMenu(NativeMenu menu)
+        {
+            if (isIterating)
+            {
+                menusToRemove.Add(menu);
+            }
+            else
+            {
+                menus.Remove(menu);
             }
         }
 
@@ -434,6 +540,20 @@ namespace GTAUI
             disableGameControl = false;
             gameControlWasDisabledLastFrame = true;
             gameControlDisabledDelayCounter = 0;
+        }
+
+        private void RegisterBuiltInJsonTypeMappings()
+        {
+            JsonTypeMapper.GetInstance().RegisterTypeMappings("menuItems", new Dictionary<string, Type>()
+            {
+               {"Back", typeof(BackMenuItem) },
+               {"Button", typeof(ButtonMenuItem) },
+               {"Checkbox", typeof(CheckBoxMenuItem) },
+               {"Close", typeof(CloseMenuItem) },
+               {"List", typeof(ListMenuItem) },
+               {"Slider", typeof(SliderMenuItem) },
+               {"Submenu", typeof(SubMenuItem) },
+            });
         }
 
         internal static void Log(string message)

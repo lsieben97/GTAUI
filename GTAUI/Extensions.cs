@@ -35,5 +35,13 @@ namespace GTAUI
         {
             return ((char)MapVirtualKey((int)key, 2)).ToString();
         }
+
+        public static void CheckNotNull(this object _, object target, string name)
+        {
+            if (target == null)
+            {
+                throw new ArgumentNullException(name);
+            }
+        }
     }
 }

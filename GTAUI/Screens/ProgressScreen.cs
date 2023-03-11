@@ -110,14 +110,17 @@ namespace GTAUI.Screens
             {
                 progress = Maximum;
             }
-            
+
             if (progress < 0)
             {
                 progress = 0;
             }
 
             CurrentProgress = progress;
-            progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * progress, progressRectangleSize.Y);
+            if (IsInitialized)
+            {
+                progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * progress, progressRectangleSize.Y);
+            }
         }
 
         /// <summary>
@@ -131,7 +134,11 @@ namespace GTAUI.Screens
                 maximum = 1;
             }
             Maximum = maximum;
-            progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * CurrentProgress, progressRectangleSize.Y);
+
+            if (IsInitialized)
+            {
+                progressRectangle.Size = new SizeF(progressRectangleSize.X / Maximum * CurrentProgress, progressRectangleSize.Y);
+            }
         }
 
         /// <summary>
@@ -141,8 +148,11 @@ namespace GTAUI.Screens
         public void SetPrompt(string prompt)
         {
             Prompt = prompt;
-            promptText.Text = prompt;
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, 300);
+            if (IsInitialized)
+            {
+                promptText.Text = prompt;
+                promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, 300);
+            }
         }
 
         /// <summary>
@@ -152,8 +162,11 @@ namespace GTAUI.Screens
         public void SetMessage(string message)
         {
             Message = message;
-            descriptionText.Text = message;
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
+            if (IsInitialized)
+            {
+                descriptionText.Text = message;
+                descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
+            }
         }
 
         protected override void Render()
