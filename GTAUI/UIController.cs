@@ -8,6 +8,7 @@ using LemonUI.Menus;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
@@ -53,6 +54,58 @@ namespace GTAUI
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
         private List<NativeMenu> menus = new List<NativeMenu>();
+
+        private readonly CancelableEventManager beforeTickHandledEventManager = new CancelableEventManager();
+        private readonly CancelableKeyEventManager beforeKeyDownHandledEventManager = new CancelableKeyEventManager();
+        private readonly CancelableKeyEventManager beforeKeyUpHandledEventManager = new CancelableKeyEventManager();
+
+        /// <summary>
+        /// Fired after the UI controller is done handling a tick event coming from a <see cref="Script"/>.
+        /// </summary>
+        public event EventHandler TickHandled;
+
+        /// <summary>
+        /// Fired after the UI controller is done handling a KeyDown event coming from a <see cref="Script"/>.
+        /// </summary>
+        public event EventHandler<KeyEventArgs> KeyDownHandled;
+
+        /// <summary>
+        /// Fired after the UI controller is done handling a KeyUp event coming from a <see cref="Script"/>.
+        /// </summary>
+        public event EventHandler<KeyEventArgs> KeyUpHandled;
+
+        /// <summary>
+        /// Fired before the UI controller will handle a tick event from a <see cref="Script"/>.
+        /// Set <see cref="CancelEventArgs.Cancel"/> to true to prevent the <see cref="UIController"/> from handling the event.
+        /// Note: after a event handler sets <see cref="CancelEventArgs.Cancel"/> to true, no more event handlers will be called.
+        /// </summary>
+        public event EventHandler<CancelEventArgs> BeforeTickHandled
+        {
+            add => beforeTickHandledEventManager.AddSubscriber(value);  
+            remove => beforeTickHandledEventManager.RemoveSubscriber(value);
+        }
+
+        /// <summary>
+        /// Fired before the UI controller will handle a KeyDown event from a <see cref="Script"/>.
+        /// Set <see cref="KeyEventArgs.Handled"/> to true to prevent the <see cref="UIController"/> from handling the event.
+        /// Note: after a event handler sets <see cref="KeyEventArgs.Handled"/> to true, no more event handlers will be called.
+        /// </summary>
+        public event EventHandler<KeyEventArgs> BeforeKeyDownHandled
+        {
+            add => beforeKeyDownHandledEventManager.AddSubscriber(value);
+            remove => beforeKeyDownHandledEventManager.RemoveSubscriber(value);
+        }
+
+        /// <summary>
+        /// Fired before the UI controller will handle a KeyUp event from a <see cref="Script"/>.
+        /// Set <see cref="KeyEventArgs.Handled"/> to true to prevent the <see cref="UIController"/> from handling the event.
+        /// Note: after a event handler sets <see cref="KeyEventArgs.Handled"/> to true, no more event handlers will be called.
+        /// </summary>
+        public event EventHandler<KeyEventArgs> BeforeKeyUpHandled
+        {
+            add => beforeKeyUpHandledEventManager.AddSubscriber(value);
+            remove => beforeKeyUpHandledEventManager.RemoveSubscriber(value);
+        }
 
         /// <summary>
         /// Get the current instance of UIController.
@@ -199,6 +252,11 @@ namespace GTAUI
                 menusToAdd.Clear();
             }
 
+            if (beforeTickHandledEventManager.FireEvent(this, new CancelEventArgs()))
+            {
+                return;
+            }
+
             if (menus.Any())
             {
                 isIterating = true;
@@ -311,6 +369,8 @@ namespace GTAUI
             previousMouseY = actualY;
             previousMouseAccept = cursorAccept;
             previousMouseCancel = cursorCancel;
+
+            TickHandled?.Invoke(this, EventArgs.Empty);
         }
 
         private void HandleGameControl()
@@ -351,6 +411,11 @@ namespace GTAUI
         /// <param name="e">The event arguments</param>
         public void OnKeyDown(KeyEventArgs e)
         {
+            if (beforeKeyDownHandledEventManager.FireEvent(this, e))
+            {
+                return;
+            }
+
             isIterating = true;
             foreach (UIComponent component in components)
             {
@@ -361,6 +426,8 @@ namespace GTAUI
 
             }
             isIterating = false;
+
+            KeyDownHandled?.Invoke(this, e);
         }
 
         /// <summary>
@@ -369,6 +436,11 @@ namespace GTAUI
         /// <param name="e">The event arguments.</param>
         public void OnKeyUp(KeyEventArgs e)
         {
+            if (beforeKeyUpHandledEventManager.FireEvent(this, e))
+            {
+                return;
+            }
+
             isIterating = true;
             foreach (UIComponent component in components)
             {
@@ -378,6 +450,8 @@ namespace GTAUI
                 }
             }
             isIterating = false;
+
+            KeyUpHandled?.Invoke(this, e);
         }
 
         /// <summary>
