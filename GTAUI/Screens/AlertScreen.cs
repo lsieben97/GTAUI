@@ -14,6 +14,7 @@ namespace GTAUI.Screens
     /// <summary>
     /// A full screen alert dialog with customizable prompt and message.
     /// Call <see cref="UIComponent.Show"/> to display the alert.
+    /// A call to <see cref="UIComponent.Register"/> is required in order to show the alert multiple times.
     /// </summary>
     public class AlertScreen : UIComponent
     {
@@ -36,7 +37,7 @@ namespace GTAUI.Screens
         /// <summary>
         /// Action to execute if the alert was accepted.
         /// </summary>
-        public Action Acccepted { get; set; }
+        public Action Accepted { get; set; }
 
         /// <summary>
         /// Action to execute if the alert was canceled.
@@ -53,35 +54,37 @@ namespace GTAUI.Screens
         /// </summary>
         /// <param name="prompt">The prompt of the alert.</param>
         /// <param name="message">The message of the alert.</param>
+        public AlertScreen(string prompt, string message) : this(prompt, message, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new Alert screen with the given parameters.
+        /// </summary>
+        /// <param name="prompt">The prompt of the alert.</param>
+        /// <param name="message">The message of the alert.</param>
+        /// <param name="acccepted">Action to execute if the alert was accepted.</param>
+        public AlertScreen(string prompt, string message, Action accepted) : this(prompt, message, accepted, null)
+        {
+        }
+
+        /// <summary>
+        /// Create a new Alert screen with the given parameters.
+        /// </summary>
+        /// <param name="prompt">The prompt of the alert.</param>
+        /// <param name="message">The message of the alert.</param>
         /// <param name="acccepted">Action to execute if the alert was accepted.</param>
         /// <param name="canceled">Action to execute if the alert was canceled.</param>
         public AlertScreen(string prompt, string message, Action acccepted, Action canceled)
         {
             Prompt = prompt;
             Message = message;
-            Acccepted = acccepted;
+            Accepted = acccepted;
             Canceled = canceled;
 
             NeedsGameControlsDisabled = true;
-        }
 
-        /// <summary>
-        /// Create a new Alert screen with the given parameters.
-        /// </summary>
-        /// <param name="prompt">The prompt of the alert.</param>
-        /// <param name="message">The message of the alert.</param>
-        /// <param name="acccepted">Action to execute if the alert was accepted.</param>
-        public AlertScreen(string prompt, string message, Action acccepted) : this(prompt, message, acccepted, null)
-        {
-        }
-
-        /// <summary>
-        /// Create a new Alert screen with the given parameters.
-        /// </summary>
-        /// <param name="prompt">The prompt of the alert.</param>
-        /// <param name="message">The message of the alert.</param>
-        public AlertScreen(string prompt, string message) : this(prompt, message, null, null)
-        {
+            Register();
         }
 
         protected override void OnInitialize()
@@ -145,7 +148,7 @@ namespace GTAUI.Screens
         {
             if (e.KeyCode == Keys.Enter)
             {
-                Acccepted?.Invoke();
+                Accepted?.Invoke();
                 Dispose();
             }
             else if (e.KeyCode == Keys.Escape)

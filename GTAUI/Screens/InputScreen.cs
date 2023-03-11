@@ -15,12 +15,10 @@ namespace GTAUI.Screens
     /// <summary>
     /// Full screen input dialog with a customizable prompt and message.
     /// Call <see cref="UIComponent.Show"/> to display the dialog.
+    /// A call to <see cref="UIComponent.Register"/> is required in order to show the input screen multiple times.
     /// </summary>
     public class InputScreen : UIComponent
     {
-        private const int INPUT_BOX_WIDTH = 1000;
-        private const int INPUT_BOX_HEIGHT = 50;
-
         private UIStyle uiStyle = UIStyle.GetInstance();
 
         private ScaledRectangle backgroundRectangle;
@@ -65,15 +63,7 @@ namespace GTAUI.Screens
         /// <param name="prompt">The prompt of the dialog.</param>
         /// <param name="message">The message of the dialog.</param>
         /// <param name="inputEntered">Action to execute when the user accepts the entered input.</param>
-        /// <param name="inputCanceled">Action to execute when the user cancels the dialog.</param>
-        public InputScreen(string prompt, string message, Action<string> inputEntered, Action inputCanceled)
-        {
-            Prompt = prompt;
-            Message = message;
-            InputEntered = inputEntered;
-            InputCanceled = inputCanceled;
-            NeedsGameControlsDisabled = true;
-        }
+        public InputScreen(string prompt, string message, Action<string> inputEntered) : this(prompt, message, inputEntered, null) { }
 
         /// <summary>
         /// Create a new input dialog with the given parameters
@@ -81,8 +71,16 @@ namespace GTAUI.Screens
         /// <param name="prompt">The prompt of the dialog.</param>
         /// <param name="message">The message of the dialog.</param>
         /// <param name="inputEntered">Action to execute when the user accepts the entered input.</param>
-        public InputScreen(string prompt, string message, Action<string> inputEntered) : this(prompt, message, inputEntered, null)
+        /// <param name="inputCanceled">Action to execute when the user cancels the dialog.</param>
+        public InputScreen(string prompt, string message, Action<string> inputEntered, Action inputCanceled)
         {
+            Prompt = prompt;
+            Message = message;
+            InputEntered = inputEntered;
+            InputCanceled = inputCanceled;
+
+            NeedsGameControlsDisabled = true;
+            Register();
         }
 
         protected override void OnInitialize()

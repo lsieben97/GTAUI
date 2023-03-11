@@ -13,6 +13,7 @@ namespace GTAUI.Screens
     /// <summary>
     /// A full screen progress dialog with customizable prompt and message.
     /// Call <see cref="UIComponent.Show"/> to display the alert.
+    /// A call to <see cref="UIComponent.Register"/> is required in order to show the progress screen multiple times.
     /// </summary>
     public class ProgressScreen : UIComponent
     {
@@ -46,6 +47,13 @@ namespace GTAUI.Screens
         public string Message { get; private set; }
 
         /// <summary>
+        /// Create a new progress screen with the given parameters and a <see cref="Maximum"/> of 100.
+        /// </summary>
+        /// <param name="prompt">The prompt of the dialog.</param>
+        /// <param name="message">The Message of the dialog.</param>
+        public ProgressScreen(string prompt, string message) : this(prompt, message, 100) { }
+
+        /// <summary>
         /// Create a new progress screen with the given parameters.
         /// </summary>
         /// <param name="prompt">The prompt of the dialog.</param>
@@ -56,15 +64,9 @@ namespace GTAUI.Screens
             Prompt = prompt;
             Message = message;
             Maximum = maximum;
-        }
 
-        /// <summary>
-        /// Create a new progress screen with the given parameters and a <see cref="Maximum"/> of 100.
-        /// </summary>
-        /// <param name="prompt">The prompt of the dialog.</param>
-        /// <param name="message">The Message of the dialog.</param>
-        public ProgressScreen(string prompt, string message) : this(prompt, message, 100)
-        {
+            NeedsGameControlsDisabled = true;
+            Register();
         }
 
         protected override void OnInitialize()

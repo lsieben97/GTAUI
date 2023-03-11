@@ -93,9 +93,6 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\builtinStyleProperties.json" />
   </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="resources\lightStyle.json" />
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
