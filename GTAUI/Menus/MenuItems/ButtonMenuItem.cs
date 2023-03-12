@@ -80,7 +80,7 @@ namespace GTAUI.Menus.MenuItems
             Item = new LemonUI.Menus.NativeItem(Title, Description ?? string.Empty);
             ValidateAndAttachEventFunctions();
             SetBadges();
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
         }
     }
 }

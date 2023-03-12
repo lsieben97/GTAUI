@@ -127,7 +127,7 @@ namespace GTAUI.Menus.MenuItems
             EventTarget = eventTarget;
             EventTargetType = eventTargetType;
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
 
             nativeItem.Maximum = GetMaximum(eventTarget);
 

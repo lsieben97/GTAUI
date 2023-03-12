@@ -57,7 +57,7 @@ namespace GTAUI.Menus.MenuItems
             SelectedItemMethod = new InvokableMethod<MenuItem>(ReflectionHelper.GetMethodWithArguments(OnSelected, new Type[] { typeof(MenuItem) }, EventTargetType));
             EnabledChangedMethod = new InvokableMethod<MenuItem>(ReflectionHelper.GetMethodWithArguments(OnEnabledChanged, new Type[] { typeof(MenuItem) }, EventTargetType));
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
         }
     }
 }

@@ -93,9 +93,9 @@ namespace GTAUI.Menus.MenuItems
         
         private void SubMenuItemActivated(object sender, EventArgs e)
         {
-            ParentMenu.Visible = false;
-            subMenu.MenuInstance.Parent = ParentMenu;
-            UIController.instance.ShowMenu(subMenu.MenuInstance);
+            ParentMenu.MenuInstance.Visible = false;
+            subMenu.MenuInstance.Parent = ParentMenu.MenuInstance;
+            subMenu.Show();
         }
 
         private Menu GetSubMenu(object eventTarget, Type eventTargetType)
@@ -121,7 +121,7 @@ namespace GTAUI.Menus.MenuItems
             EventTarget = eventTarget;
             EventTargetType = eventTargetType;
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
 
             subMenu = GetSubMenu(eventTarget, eventTargetType);
 

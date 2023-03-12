@@ -168,7 +168,7 @@ namespace GTAUI.Menus
 
             if (MenuInstance.Visible == false)
             {
-                UIController.instance.ShowMenu(MenuInstance);
+                UIController.instance.ShowMenu(this);
             }
         }
 
@@ -185,7 +185,7 @@ namespace GTAUI.Menus
             }
 
             MenuInstance.Visible = false;
-            UIController.instance.RemoveMenu(MenuInstance);
+            UIController.instance.RemoveMenu(this);
         }
 
         /// <summary>
@@ -203,7 +203,7 @@ namespace GTAUI.Menus
             }
 
             MenuInstance.Back();
-            UIController.instance.RemoveMenu(MenuInstance);
+            UIController.instance.RemoveMenu(this);
         }
 
         /// <summary>
@@ -242,7 +242,7 @@ namespace GTAUI.Menus
             }
 
             Items.Add(item);
-            item.ParentMenu = MenuInstance;
+            item.ParentMenu = this;
             MenuInstance.Add(item.Item);
         }
 

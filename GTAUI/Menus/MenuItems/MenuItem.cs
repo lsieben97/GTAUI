@@ -35,7 +35,7 @@ namespace GTAUI.Menus.MenuItems
         protected string OnEnabledChangedFunctionName { get; set; }
 
         public NativeItem Item { get; protected set; }
-        public NativeMenu ParentMenu { get; set; }
+        public Menu ParentMenu { get; set; }
         public bool IsValid { get; protected set; } = true;
 
         public abstract void InitializeFromExistingProperties(object eventTarget, Type eventTargetType);

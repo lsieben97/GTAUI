@@ -97,7 +97,7 @@ namespace GTAUI.Menus.MenuItems
             EventTarget = eventTarget;
             EventTargetType = eventTargetType;
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
 
             checkboxChangedMethod = new InvokableMethod<MenuItem, bool>(ReflectionHelper.GetMethodWithArguments(OnCheckboxChanged, new Type[] { typeof(MenuItem), typeof(bool) }, EventTargetType));
             nativeItem.CheckboxChanged += ItemCheckboxChanged;

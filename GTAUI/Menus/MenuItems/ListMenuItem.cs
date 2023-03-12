@@ -115,7 +115,7 @@ namespace GTAUI.Menus.MenuItems
             EventTarget = eventTarget;
             EventTargetType = eventTargetType;
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
 
             MethodInfo getListMethod = ReflectionHelper.GetMehodWithReturnType(GetListFunc, typeof(IEnumerable<object>), EventTargetType);
             if (getListMethod == null)

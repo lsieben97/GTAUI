@@ -44,7 +44,7 @@ namespace GTAUI.Menus.MenuItems
 
         private void CloseItemActivated(object sender, EventArgs e)
         {
-            ParentMenu.Visible = false;
+            ParentMenu.Close();
         }
 
         /// <inheritdoc/>
@@ -53,7 +53,7 @@ namespace GTAUI.Menus.MenuItems
             EventTarget = eventTarget;
             EventTargetType = eventTargetType;
 
-            ParentMenu = (eventTarget as Menu).MenuInstance;
+            ParentMenu = (eventTarget as Menu);
         }
     }
 }

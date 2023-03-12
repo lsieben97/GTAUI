@@ -34,6 +34,7 @@ namespace GTAUI
         /// Get the current screensize.
         /// </summary>
         public Size ScreenSize { get => GTA.UI.Screen.Resolution; }
+        public Version GTAUIVersion => gtauiVersion;
 
         private bool isInitialized = false;
         private List<UIComponent> components;
@@ -42,8 +43,8 @@ namespace GTAUI
         private List<UIComponent> componentsToAdd;
         private List<UIComponent> componentsToRemove;
         private List<Type> availableMenus;
-        private List<NativeMenu> menusToAdd;
-        private List<NativeMenu> menusToRemove;
+        private List<Menus.Menu> menusToAdd;
+        private List<Menus.Menu> menusToRemove;
 
         private bool gameControlWasDisabledLastFrame = false;
         private bool disableGameControl = false;
@@ -53,7 +54,8 @@ namespace GTAUI
         private float previousMouseY = 0;
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
-        private List<NativeMenu> menus = new List<NativeMenu>();
+        private List<Menus.Menu> menus = new List<Menus.Menu>();
+        private readonly Version gtauiVersion;
 
         private readonly CancelableEventManager beforeTickHandledEventManager = new CancelableEventManager();
         private readonly CancelableKeyEventManager beforeKeyDownHandledEventManager = new CancelableKeyEventManager();
@@ -81,7 +83,7 @@ namespace GTAUI
         /// </summary>
         public event EventHandler<CancelEventArgs> BeforeTickHandled
         {
-            add => beforeTickHandledEventManager.AddSubscriber(value);  
+            add => beforeTickHandledEventManager.AddSubscriber(value);
             remove => beforeTickHandledEventManager.RemoveSubscriber(value);
         }
 
@@ -168,6 +170,7 @@ namespace GTAUI
             if (instance == null)
             {
                 instance = this;
+                gtauiVersion = Assembly.GetExecutingAssembly().GetName().Version;
             }
             else
             {
@@ -192,7 +195,9 @@ namespace GTAUI
                 }
             }
 
-            Log($"Initializing GTAUI V{Assembly.GetExecutingAssembly().GetName().Version} for GTA V version {Game.Version}.\nUsing LemonUI3 ({Assembly.GetAssembly(typeof(ScaledRectangle)).FullName})\nCurrent screen size: {ScreenSize}");
+
+
+            Log($"Initializing GTAUI V{gtauiVersion} for GTA V version {Game.Version}.\nUsing LemonUI3 ({Assembly.GetAssembly(typeof(ScaledRectangle)).FullName})\nCurrent screen size: {ScreenSize}");
 
             System.Threading.Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
@@ -202,8 +207,8 @@ namespace GTAUI
             componentsToAdd = new List<UIComponent>();
             componentsToRemove = new List<UIComponent>();
             availableMenus = new List<Type>();
-            menusToAdd = new List<NativeMenu>();
-            menusToRemove = new List<NativeMenu>();
+            menusToAdd = new List<Menus.Menu>();
+            menusToRemove = new List<Menus.Menu>();
 
             RegisterAssemblyResources(Assembly.GetExecutingAssembly());
             UIStyle.GetInstance().RegisterStylingProperties("GTAUI.resources.builtinStyleProperties.json");
@@ -238,16 +243,15 @@ namespace GTAUI
                 }
                 componentsToAdd.Clear();
 
-                foreach (NativeMenu menu in menusToRemove)
+                foreach (Menus.Menu menu in menusToRemove)
                 {
                     menus.Remove(menu);
                 }
                 menusToRemove.Clear();
 
-                foreach (NativeMenu menu in menusToAdd)
+                foreach (Menus.Menu menu in menusToAdd)
                 {
                     menus.Add(menu);
-                    menu.Visible = true;
                 }
                 menusToAdd.Clear();
             }
@@ -260,9 +264,9 @@ namespace GTAUI
             if (menus.Any())
             {
                 isIterating = true;
-                foreach (NativeMenu menu in menus)
+                foreach (Menus.Menu menu in menus)
                 {
-                    menu.Process();
+                    menu.MenuInstance.Process();
                 }
                 isIterating = false;
                 return;
@@ -505,7 +509,7 @@ namespace GTAUI
         }
 
         /// <summary>
-        /// Get a resource fron any of the assemblies registered with <see cref="RegisterAssemblyResources(Assembly)"/> or from the fle system if no embedded resource can be found.
+        /// Get a resource from any of the assemblies registered with <see cref="RegisterAssemblyResources(Assembly)"/> or from the fle system if no embedded resource can be found.
         /// </summary>
         /// <param name="path">The name if it's an embeddable resource or path if it's from the file system.</param>
         /// <returns>The text contents of the resource or null if the resource could not be found.</returns>
@@ -576,7 +580,7 @@ namespace GTAUI
             return menuType.GetConstructor(Type.EmptyTypes).Invoke(new object[] { }) as Menus.Menu;
         }
 
-        internal void ShowMenu(NativeMenu menu)
+        public void ShowMenu(Menus.Menu menu)
         {
             if (isIterating)
             {
@@ -585,12 +589,12 @@ namespace GTAUI
             else
             {
                 menus.Add(menu);
-                menu.Visible = true;
             }
+            menu.MenuInstance.Visible = true;
 
         }
 
-        internal void RemoveMenu(NativeMenu menu)
+        public void RemoveMenu(Menus.Menu menu)
         {
             if (isIterating)
             {
@@ -600,6 +604,21 @@ namespace GTAUI
             {
                 menus.Remove(menu);
             }
+        }
+
+        public bool IsMenuShowing(Menus.Menu menu)
+        {
+            return menus.Contains(menu);
+        }
+
+        public bool IsMenuShowing(NativeMenu menu)
+        {
+            return menus.Any(m => m.MenuInstance == menu);
+        }
+
+        public bool IsMenuShowing(string menuName)
+        {
+            return menus.Any(m => m.GetType().Name == menuName);
         }
 
         private void DisableGameControl()
