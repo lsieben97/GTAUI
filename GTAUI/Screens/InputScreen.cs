@@ -80,6 +80,7 @@ namespace GTAUI.Screens
             InputCanceled = inputCanceled;
 
             NeedsGameControlsDisabled = true;
+            NeedsStartTimeout = true;
             Register();
         }
 
@@ -141,12 +142,11 @@ namespace GTAUI.Screens
 
             editableText = new EditableText(new PointF(inputBoxOrigin + inputBoxBorderThickness - 1, inputBoxYOffset + inputBoxBorderThickness - 1), string.Empty, inputTextFontSize, inputTextColor, inputTextFont);
             AddChildComponent(editableText);
-        }
 
-        public override void Show()
-        {
-            base.Show();
-            editableText.HasFocus = true;
+            if (Visible)
+            {
+                editableText.HasFocus = true;
+            }
         }
 
         protected override void OnKeyDown(KeyEventArgs e)

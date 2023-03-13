@@ -54,6 +54,19 @@ namespace GTAUI
         /// <c>true</c> if the component always needs mouse and keyboard input events sent to it, even if it's not visible.
         /// </summary>
         public bool AlwaysNeedsInput { get; set; } = false;
+        
+        /// <summary>
+        /// <c>true</c> if the <see cref="UIController"/> should block user input for a small amount of time when the component is registered.
+        /// This is useful if you don't want this component to respond to previous user input like accepting a menu or typing in a textbox.
+        /// </summary>
+        public bool NeedsStartTimeout { get; protected set; }
+
+        /// <summary>
+        /// <c>true</c> if the timeout specified by <see cref="NeedsStartTimeout"/> has elapsed. For components that do not have a start timeout, this property will always be <c>true</c>.
+        /// </summary>
+        public bool StartTimeoutFinished { get; internal set; }
+
+        internal int startTimeoutFrames { get; set; }
 
         internal bool IsDisposed { get; set; } = false;
 

@@ -28,6 +28,8 @@ namespace GTAUI
     /// </summary>
     public class UIController
     {
+        private const int GAME_CONTROL_DELAY_FRAME_AMOUNT = 20;
+        private const int COMPONENT_START_DELAY_FRAME_AMOUNT = 20;
         internal static UIController instance { get; set; }
 
         /// <summary>
@@ -269,6 +271,11 @@ namespace GTAUI
                     menu.MenuInstance.Process();
                 }
                 isIterating = false;
+
+                if (menus.TrueForAll(m => m.MenuInstance.Visible == false))
+                {
+                    menusToRemove.AddRange(menus);
+                }
                 return;
             }
 
@@ -332,6 +339,31 @@ namespace GTAUI
                 {
                     component.FireInitialize();
                     component.IsInitialized = true;
+                    if (component.NeedsStartTimeout)
+                    {
+                        component.startTimeoutFrames = COMPONENT_START_DELAY_FRAME_AMOUNT;
+                    }
+                    else
+                    {
+                        component.StartTimeoutFinished = true;
+                    }
+                }
+
+                if (component.startTimeoutFrames > 0)
+                {
+                    component.startTimeoutFrames--;
+                    component.FireUpdate();
+
+                    if (component.Visible)
+                    {
+                        component.FireRender();
+                    }
+
+                    continue;
+                }
+                else
+                {
+                    component.StartTimeoutFinished = true;
                 }
 
                 component.FireUpdate();
@@ -389,7 +421,7 @@ namespace GTAUI
 
             if (gameControlWasDisabledLastFrame == true)
             {
-                gameControlDisabledDelayCounter = 20;
+                gameControlDisabledDelayCounter = GAME_CONTROL_DELAY_FRAME_AMOUNT;
                 gameControlWasDisabledLastFrame = false;
             }
 
@@ -423,7 +455,7 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                if (component.Visible || component.AlwaysNeedsInput)
+                if ((component.Visible || component.AlwaysNeedsInput) && component.startTimeoutFrames == 0)
                 {
                     component.FireKeyDown(e);
                 }
@@ -448,7 +480,7 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                if (component.Visible || component.AlwaysNeedsInput)
+                if ((component.Visible || component.AlwaysNeedsInput) && component.startTimeoutFrames == 0)
                 {
                     component.FireKeyUp(e);
                 }

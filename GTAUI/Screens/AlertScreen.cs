@@ -83,6 +83,7 @@ namespace GTAUI.Screens
             Canceled = canceled;
 
             NeedsGameControlsDisabled = true;
+            NeedsStartTimeout = true;
 
             Register();
         }
