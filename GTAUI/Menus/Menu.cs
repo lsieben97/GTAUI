@@ -197,11 +197,17 @@ namespace GTAUI.Menus
         /// </summary>
         public void Back()
         {
+            if (MenuInstance.Parent == null)
+            {
+                Close();
+            }
+
             if (MenuInstance.Visible == false)
             {
                 return;
             }
-
+            
+            MenuInstance.Parent.Visible = true;
             MenuInstance.Back();
             UIController.instance.RemoveMenu(this);
         }

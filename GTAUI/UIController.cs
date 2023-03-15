@@ -272,7 +272,7 @@ namespace GTAUI
                 }
                 isIterating = false;
 
-                if (menus.TrueForAll(m => m.MenuInstance.Visible == false))
+                if (menus.TrueForAll(m => m.MenuInstance.Visible == false) && menusToAdd.Any() == false)
                 {
                     menusToRemove.AddRange(menus);
                 }
