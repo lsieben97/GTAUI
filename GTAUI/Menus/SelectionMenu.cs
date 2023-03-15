@@ -11,7 +11,7 @@ namespace GTAUI.Menus
     /// The menu can be further customized by inheriting from this class.
     /// </summary>
     /// <typeparam name="T">The type of object that can be selected.</typeparam>
-    class SelectionMenu<T> : Menu
+    public class SelectionMenu<T> : Menu
     {
         private UIStyle uiStyle = UIStyle.GetInstance();
         private readonly IEnumerable<T> options;
@@ -100,7 +100,6 @@ namespace GTAUI.Menus
             if (itemHasBeenSelected == false)
             {
                 onCancel?.Invoke();
-                itemHasBeenSelected = false;
             }
         }
 
@@ -111,10 +110,9 @@ namespace GTAUI.Menus
         /// </summary>
         /// <param name="option">The option to create a menu item for.</param>
         /// <returns>A menu item for the given option.</returns>
-        protected virtual MenuItem CreateMenuItemForOption(T option)
+        protected virtual MenuItem CreateMenuItemForOption(T option, string title, string description)
         {
-
-            return new ButtonMenuItem(string.Empty, string.Empty, OptionMenuItemActivated);
+            return new ButtonMenuItem(string.Empty,title, description, OptionMenuItemActivated);
         }
 
         /// <summary>
@@ -127,7 +125,6 @@ namespace GTAUI.Menus
             CloseMenuItem item = new CloseMenuItem();
             item.Title = uiStyle.GetStyleProperty<string>("gtaui.menus.selectionMenu.closeMenuItem.title");
             item.Description = uiStyle.GetStyleProperty<string>("gtaui.menus.selectionMenu.closeMenuItem.description");
-
             return item;
         }
 
@@ -179,15 +176,15 @@ namespace GTAUI.Menus
                     continue;
                 }
 
-                MenuItem menuItem = CreateMenuItemForOption(item);
+                MenuItem menuItem = CreateMenuItemForOption(item, title, description);
                 if (menuItem == null)
                 {
                     UIController.Log($"Error: CreateMenuItemForOption returned null when creating menu items for a selection menu with title '{Title}'.");
                     return false;
                 }
 
-                menuItem.Title = title;
-                menuItem.Description = description;
+                //menuItem.Title = title;
+                //menuItem.Description = description;
                 menuItem.Item.Enabled = enabled;
                 menuItem.Item.Tag = item;
 
@@ -228,8 +225,18 @@ namespace GTAUI.Menus
                 UIController.Log($"Error: option menu item '{item.Title}' was selected but it's Tag property does not contain valid data!");
                 return;
             }
+
             itemHasBeenSelected = true;
             onSelection((T)item.Item.Tag);
+
+            if (ShowBackButton)
+            {
+                Back();
+            }
+            else
+            {
+                Close();
+            }
         }
 
     }

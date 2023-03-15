@@ -134,10 +134,10 @@ namespace GTAUI.Menus
         /// </summary>
         /// <param name="option">The option to create a menu item for.</param>
         /// <returns>A menu item for the given option.</returns>
-        protected virtual CheckBoxMenuItem CreateMenuItemForOption(T option)
+        protected virtual CheckBoxMenuItem CreateMenuItemForOption(T option, string title, string description)
         {
 
-            return new CheckBoxMenuItem(string.Empty, string.Empty, OptionMenuItemACheckboxChanged);
+            return new CheckBoxMenuItem(string.Empty, title, description, OptionMenuItemACheckboxChanged);
         }
 
         /// <summary>
@@ -191,7 +191,7 @@ namespace GTAUI.Menus
         {
             string title = uiStyle.GetStyleProperty<string>("gtaui.menus.multiSelectionMenu.deselectAllMenuItem.title");
             string description = uiStyle.GetStyleProperty<string>("gtaui.menus.multiSelectionMenu.deselectAllMenuItem.description");
-            ButtonMenuItem item = new ButtonMenuItem(title, description, SelectAllOptions);
+            ButtonMenuItem item = new ButtonMenuItem(title, description, DeselectAllOptions);
 
             return item;
         }
@@ -290,6 +290,14 @@ namespace GTAUI.Menus
         protected void AcceptSelection(MenuItem _)
         {
             onSelection?.Invoke(selectedOptions);
+            if (ShowBackButton)
+            {
+                Back();
+            }
+            else
+            {
+                Close();
+            }
         }
 
         /// <summary>
@@ -354,7 +362,7 @@ namespace GTAUI.Menus
                     continue;
                 }
 
-                CheckBoxMenuItem menuItem = CreateMenuItemForOption(item);
+                CheckBoxMenuItem menuItem = CreateMenuItemForOption(item, title, description);
                 if (menuItem == null)
                 {
                     UIController.Log($"Error: CreateMenuItemForOption returned null when creating menu items for a selection menu with title '{Title}'.");

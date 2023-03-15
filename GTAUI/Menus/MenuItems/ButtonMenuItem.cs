@@ -30,7 +30,7 @@ namespace GTAUI.Menus.MenuItems
         /// <param name="description">The description of this menu item.</param>
         /// <param name="onActivated">The action to invoke when the menu item is activated.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ButtonMenuItem(string id, string title, string description, Action<MenuItem> onActivated) : this(id, title, description, onActivated, null) { }
+        public ButtonMenuItem(string id, string title, string description, Action<MenuItem> onActivated) : this(id, title, description, null, onActivated) { }
 
         /// <summary>
         /// Create a new button menu item.
@@ -40,7 +40,7 @@ namespace GTAUI.Menus.MenuItems
         /// <param name="onActivated">The action to invoke when this menu item is activated.</param>
         /// <param name="onSelected">The action to invoke when this menu item is selected.</param>
         /// <exception cref="ArgumentNullException"></exception>
-        public ButtonMenuItem(string id, string title, Action<MenuItem> onActivated, Action<MenuItem> onSelected) : this(id, title, string.Empty, onActivated, onSelected) { }
+        public ButtonMenuItem(string id, string title, Action<MenuItem> onActivated, Action<MenuItem> onSelected) : this(id, title, string.Empty, onSelected, onActivated) { }
 
         /// <summary>
         /// Create a new button menu item.
