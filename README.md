@@ -33,19 +33,23 @@ The following table shows what features are currently implemented.
 | Fullscreen message alert                       | :white_check_mark: | :white_check_mark: |
 | Fullscreen input box                           | :white_check_mark: | :white_check_mark: |
 | Fullscreen progress bar                        | :white_check_mark: | :white_check_mark: |
-| **Menus**                                      | :wrench:           | :wrench:           |
-| Basic `NativeMenu` wrapper                     | :wrench:           | :red_circle:*1*    |
-| Creating menus defined in json files           | :wrench:           | :heavy_minus_sign: |
-| Creating menus from code                       | :wrench:           | :heavy_minus_sign: |
-| Creating menus via fluent builder API          | :wrench:           | :heavy_minus_sign: |
-| Custom menu items support                      | :wrench:           | :wrench:           |
-| Selection menus                                | :wrench:           | :wrench:           |
-| Multiple-selection menus                       | :wrench:           | :wrench:           |
+| **Menus**                                      | :white_check_mark: | :white_check_mark: |
+| Basic `NativeMenu` wrapper                     | :white_check_mark: | :red_circle:       |
+| Creating menus defined in json files           | :white_check_mark: | :heavy_minus_sign: |
+| Creating menus from code                       | :white_check_mark: | :heavy_minus_sign: |
+| Creating menus via fluent builder API          | :white_check_mark: | :heavy_minus_sign: |
+| Custom menu items support                      | :white_check_mark: | :white_check_mark: |
+| Selection menus                                | :white_check_mark: | :white_check_mark: |
+| Multiple-selection menus                       | :white_check_mark: | :white_check_mark: |
 | **Draggable and responsive window system**     | :red_circle:       | :red_circle:       |
 | Basic window handling                          | :red_circle:       | :red_circle:       |
 | WindowUI components system                     | :red_circle:       | :red_circle:       |
 | Creating windows with ui defined in json files | :red_circle:       | :red_circle:       |
 | Responsive layout components                   | :red_circle:       | :red_circle:       |
+| **WindowUI Layouts**                           | :red_circle:       | :heavy_minus_sign: |
+| Stack Layout                                   | :red_circle:       | :heavy_minus_sign: |
+| Border Layout                                  | :red_circle:       | :heavy_minus_sign: |
+| Grid Layout                                    | :red_circle:       | :heavy_minus_sign: |
 | **WindowUI components**                        | :red_circle:       | :red_circle:       |
 | Label                                          | :red_circle:       | :red_circle:       |
 | Button                                         | :red_circle:       | :red_circle:       |
@@ -62,8 +66,6 @@ The following table shows what features are currently implemented.
 | Open file dialog                               | :red_circle:       | :red_circle:       |
 | Save file dialog                               | :red_circle:       | :red_circle:       |
 | Folder selection dialog                        | :red_circle:       | :red_circle:       |
-
-*1*: Currently only the text and description of `CloseMenuItem` and `BackMenuItem` are stylable. Full menu styling coming soon...
 
 ## Screenshots
 *Coming soon...*
