@@ -1,0 +1,9 @@
+{
+  "Title": "Submenu",
+  "Subtitle": "This is a submenu.",
+  "Items": [
+    {
+      "Type": "Back"
+    }
+  ]
+}

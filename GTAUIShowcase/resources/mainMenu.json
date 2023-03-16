@@ -1,0 +1,32 @@
+{
+  "Title": "GTAUI Showcase",
+  "Items": [
+    {
+      "Type": "Submenu",
+      "Title": "Fullscreen alerts",
+      "Description": "View various fullscreen alerts.",
+      "SubmenuName": "AlertsMenu"
+    },
+    {
+      "Type": "Submenu",
+      "Title": "Menus",
+      "Description": "View various menu configurations.",
+      "SubmenuName": "MenusMenu"
+    },
+    {
+      "Type": "Submenu",
+      "Title": "Styling",
+      "Description": "View various styling options.",
+      "SubmenuName": "StylingMenu"
+    },
+    {
+      "Type": "Submenu",
+      "Title": "About",
+      "Description": "View info about this mod.",
+      "SubmenuName": "AboutMenu"
+    },
+    {
+      "Type": "Close"
+    }
+  ]
+}

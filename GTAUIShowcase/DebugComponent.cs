@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace UITest
+namespace GTAUIShowcase
 {
     public class DebugComponent : UIComponent
     {
@@ -21,7 +21,7 @@ namespace UITest
         private bool rightMouseButton;
         private PointF mousePosition;
 
-        public override void OnInitialize()
+        protected override void OnInitialize()
         {
             NeedsGameControlsDisabled = true;
             NeedsVisibleMouseCursor = true;
@@ -29,39 +29,39 @@ namespace UITest
             text.Color = Color.Red;
         }
 
-        public override void OnKeyDown(KeyEventArgs e)
+        protected override void OnKeyDown(KeyEventArgs e)
         {
             keyDown = e.KeyCode.ToString();
         }
 
-        public override void OnKeyUp(KeyEventArgs e)
+        protected override void OnKeyUp(KeyEventArgs e)
         {
             keyUp = e.KeyCode.ToString();
         }
 
-        public override void OnMouseButtonDown(MouseButtons buttons)
+        protected override void OnMouseButtonChange(MouseButtons buttons)
         {
             leftMouseButton = buttons == MouseButtons.Left;
             rightMouseButton = buttons == MouseButtons.Right;
         }
 
-        public override void OnMouseMove(System.Drawing.PointF position)
+        protected override void OnMouseMove(System.Drawing.PointF position)
         {
             mousePosition = position;
         }
 
-        public override void OnMouseScroll(ScrollDirection direction)
+        protected override void OnMouseScroll(ScrollDirection direction)
         {
             mouseScrollUp = direction == ScrollDirection.Up;
             mouseScrollDown = direction == ScrollDirection.Down;
         }
 
-        public override void Render()
+        protected override void Render()
         {
             text.Draw();
         }
 
-        public override void Update()
+        protected override void Update()
         {
             text.Text = $"Mouse position: {mousePosition}\nkeyDown: {keyDown}\nkeyUp: {keyUp}\nleft mouse button pressed: {leftMouseButton}\nright mouse button pressed: {rightMouseButton}\nmouse scrolling down: {mouseScrollDown}\nmouse scrolling up: {mouseScrollUp}";
             mouseScrollDown = false;

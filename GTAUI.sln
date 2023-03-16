@@ -1,11 +1,10 @@
-
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.2.32630.192
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTAUI", "GTAUI\GTAUI.csproj", "{A4B9300B-8912-481A-ABDB-0D2B9524E41B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UITest", "UITest\UITest.csproj", "{2618A6D8-B692-429C-BA97-869CCCAE45E2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GTAUIShowcase", "GTAUIShowcase\GTAUIShowcase.csproj", "{2618A6D8-B692-429C-BA97-869CCCAE45E2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

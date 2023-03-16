@@ -1,0 +1,55 @@
+﻿{
+  "Title": "Test menu",
+  "SubTitle": "Subtitle",
+  "Items": [
+    {
+      "Title": "I'm a button",
+      "Description": "A regular button",
+      "OnSelected": "ItemSelected",
+      "OnActivated": "ButtonActivated"
+    },
+    {
+      "Title": "Button with badge",
+      "Description": "A regular button with a badge. (Can also be shown to the right)",
+      "OnSelected": "ItemSelected",
+      "OnActivated": "ButtonActivated",
+      "LeftBadge": {
+        "Dictionary": "commonmenu",
+        "Texture": "mp_alerttriangle"
+      }
+    },
+    {
+      "Title": "Check me!",
+      "Description": "A checkbox.",
+      "Type": "Checkbox",
+      "OnSelected": "ItemSelected",
+      "OnCheckboxChanged": "CheckboxChanged"
+    },
+    {
+      "Title": "Go to submenu",
+      "Type": "Submenu",
+      "Description": "A submenu",
+      "OnSelected": "ItemSelected",
+      "SubmenuName": "ExampleSubMenu"
+    },
+    {
+      "Title": "List",
+      "Description": "A list of items",
+      "Type": "List",
+      "GetListFunc": "GetList",
+      "OnSelected": "ItemSelected",
+      "OnItemSelected": "ListItemSelected"
+    },
+    {
+      "Title": "Slider",
+      "Description": "A slider of numbers",
+      "Type": "Slider",
+      "OnSelected": "ItemSelected",
+      "OnItemSelected": "SliderItemSelected",
+      "Maximum": 10
+    },
+    {
+      "Type": "Back"
+    }
+  ]
+}

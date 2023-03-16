@@ -1,0 +1,23 @@
+{
+  "Title": "Alerts",
+  "Items": [
+    {
+      "Title": "Show fullscreen alert example",
+      "Description": "Show an example of a fullscreen alert.",
+      "OnActivated": "ShowAlertExample"
+    },
+    {
+      "Title": "Show input screen alert example",
+      "Description": "Show an example of an input screen.",
+      "OnActivated": "ShowInputScreenExample"
+    },
+    {
+      "Title": "Show progress screen example",
+      "Description": "Show an example of a progress screen.",
+      "OnActivated": "ShowProgressScreenExample"
+    },
+    {
+      "Type": "Back"
+    }
+  ]
+}

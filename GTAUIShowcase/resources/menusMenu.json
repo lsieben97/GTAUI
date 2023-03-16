@@ -1,0 +1,25 @@
+{
+  "Title": "Menus",
+  "Items": [
+    {
+      "Type": "Submenu",
+      "Title": "Show example menu",
+      "Description": "Show an example menu displaying the possibilities with menus",
+      "SubmenuName": "ExampleMenu",
+      "OnActivated": "ShowSelectMenu"
+    },
+    {
+      "Title": "Show example selection menu",
+      "Description": "Show an example selection menu.",
+      "OnActivated": "ShowSelectMenu"
+    },
+    {
+      "Title": "Show example multi-selection menu",
+      "Description": "Show an example multi-selection menu.",
+      "OnActivated": "ShowMultiSelectMenu"
+    },
+    {
+      "Type": "Back"
+    }
+  ]
+}

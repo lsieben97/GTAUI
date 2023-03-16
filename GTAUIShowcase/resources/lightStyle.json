@@ -1,0 +1,13 @@
+{
+  "gtaui.alertScreen.backgroundColor": "#ffffff",
+  "gtaui.alertScreen.descriptionColor": "#000000",
+  "gtaui.alertScreen.helpTextColor": "#000000",
+  "gtaui.progressScreen.backgroundColor": "#ffffff",
+  "gtaui.progressScreen.descriptionColor": "#000000",
+  "gtaui.progressScreen.progressRectangleColor": "#000000",
+  "gtaui.inputScreen.backgroundColor": "#ffffff",
+  "gtaui.inputScreen.descriptionColor": "#000000",
+  "gtaui.inputScreen.helpTextColor": "#000000",
+  "gtaui.inputScreen.inputBoxColor": "#000000",
+  "gtaui.inputScreen.inputTextColor": "#000000"
+}

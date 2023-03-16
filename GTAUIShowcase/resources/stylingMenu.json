@@ -1,0 +1,18 @@
+{
+  "Title": "Styling",
+  "Items": [
+    {
+      "Title": "Apply light style",
+      "Description": "Apply a 'light' style. This will affect how certain UI elements are rendered like full screen alerts.",
+      "OnActivated": "ApplyLightStyle"
+    },
+    {
+      "Title": "Reset styling",
+      "Description": "Apply the default value to styling property.",
+      "OnActivated": "ResetStyle"
+    },
+    {
+      "Type": "Back"
+    }
+  ]
+}
