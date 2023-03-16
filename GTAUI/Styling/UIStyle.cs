@@ -14,6 +14,11 @@ namespace GTAUI.Styling
 
         private List<StyleProperty> properties = new List<StyleProperty>();
 
+        /// <summary>
+        /// Fired when any of the style properties change by calling <see cref="ApplyStyle(string)"/> or <see cref="ResetStyleProperties"/>.
+        /// </summary>
+        public event EventHandler StylePropertiesChanged;
+
         public static UIStyle GetInstance()
         {
             if (instance == null)
@@ -80,6 +85,7 @@ namespace GTAUI.Styling
             }
 
             Dictionary<string, object> styleProperties = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            bool propertiesChanged = false;
 
             foreach (KeyValuePair<string, object> property in styleProperties)
             {
@@ -97,6 +103,12 @@ namespace GTAUI.Styling
                 }
 
                 existingProperty.ActualValue = actualValue;
+                propertiesChanged = true;
+            }
+
+            if (propertiesChanged)
+            {
+                StylePropertiesChanged?.Invoke(this, EventArgs.Empty);
             }
 
             return true;
@@ -138,6 +150,17 @@ namespace GTAUI.Styling
             }
 
             UIController.Log("Registered style properties:\n" + builder.ToString());
+        }
+
+        /// <summary>
+        /// Set the value of all style properties to their default values.
+        /// </summary>
+        public void ResetStyleProperties()
+        {
+            foreach(StyleProperty property in properties)
+            {
+                property.ActualValue = property.GetActualValue(property.DefaultValue);
+            }
         }
     }
 }
