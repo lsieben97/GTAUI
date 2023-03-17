@@ -19,7 +19,7 @@ namespace GTAUI.Screens
     /// </summary>
     public class InputScreen : UIComponent
     {
-        private UIStyle uiStyle = UIStyle.GetInstance();
+        private readonly UIStyle uiStyle = UIStyle.GetInstance();
 
         private ScaledRectangle backgroundRectangle;
         private ScaledRectangle topBorderRectangle;
@@ -102,7 +102,7 @@ namespace GTAUI.Screens
             GTA.UI.Font helpTextFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.inputScreen.helpTextFont");
             Color helpTextColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.helpTextColor");
             Point helpTextOffset = uiStyle.GetStyleProperty<Point>("gtaui.inputScreen.helpTextOffset");
-            string helptTextText = uiStyle.GetStyleProperty<string>("gtaui.inputScreen.helpTextText");
+            string helpTextText = uiStyle.GetStyleProperty<string>("gtaui.inputScreen.helpTextText");
 
             Color inputBoxColor = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.inputBoxColor");
             int inputBoxYOffset = uiStyle.GetStyleProperty<int>("gtaui.inputScreen.inputBoxYOffset");
@@ -115,18 +115,18 @@ namespace GTAUI.Screens
 
             promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
             promptText.Color = promptColor;
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+            promptText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
 
             descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
             descriptionText.Color = descriptionColor;
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
+            descriptionText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
 
-            buttonHelpText = new ScaledText(new PointF(), helptTextText, helpTextFontSize, helpTextFont);
+            buttonHelpText = new ScaledText(new PointF(), helpTextText, helpTextFontSize, helpTextFont);
             buttonHelpText.Alignment = Alignment.Right;
             buttonHelpText.Color = helpTextColor;
-            buttonHelpText.Position = new PointF(UIController.instance.ScreenSize.Width - helpTextOffset.X, UIController.instance.ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
+            buttonHelpText.Position = new PointF(UIController.GetInstance().ScreenSize.Width - helpTextOffset.X, UIController.GetInstance().ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
 
-            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
+            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.GetInstance().ScreenSize.Width, UIController.GetInstance().ScreenSize.Height));
             backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.inputScreen.backgroundColor");
 
             float inputBoxOrigin = GTA.UI.Screen.Resolution.Width / 2 - inputBoxSize.X / 2;

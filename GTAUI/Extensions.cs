@@ -17,7 +17,7 @@ namespace GTAUI
         private static extern int MapVirtualKey(int uCode, int uMapType);
 
         /// <summary>
-        /// Checks wether the key represents a character that can be printed visibly on screen.
+        /// Checks whether the key represents a character that can be printed visibly on screen.
         /// </summary>
         /// <param name="key">The key</param>
         /// <returns><c>true</c> when the key represents a character that can be printed visibly on screen. <c>false</c> otherwise.</returns>
@@ -34,14 +34,6 @@ namespace GTAUI
         public static string GetString(this Keys key)
         {
             return ((char)MapVirtualKey((int)key, 2)).ToString();
-        }
-
-        public static void CheckNotNull(this object _, object target, string name)
-        {
-            if (target == null)
-            {
-                throw new ArgumentNullException(name);
-            }
         }
     }
 }

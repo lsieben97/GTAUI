@@ -30,7 +30,7 @@ namespace GTAUI
         public PointF Position { get; set; } = new PointF();
 
         /// <summary>
-        /// <c>true</c> if the component has the same size as the screen. Setting this to <c>true</c> causes the component to automatically set the <see cref="Size"/> to the samen value as <see cref="UIController.ScreenSize"/>.
+        /// <c>true</c> if the component has the same size as the screen. Setting this to <c>true</c> causes the component to automatically set the <see cref="Size"/> to the same value as <see cref="UIController.ScreenSize"/>.
         /// </summary>
         public bool IsFullScreen { get; set; } = false;
 
@@ -46,7 +46,7 @@ namespace GTAUI
         public bool NeedsVisibleMouseCursor { get; set; } = false;
 
         /// <summary>
-        /// <c>true</c> if the component has focus. Not used by the <see cref="UIController"/> but handy for determining wether the component needs to handle keyboard and mouse events.
+        /// <c>true</c> if the component has focus. Not used by the <see cref="UIController"/> but handy for determining whether the component needs to handle keyboard and mouse events.
         /// </summary>
         public bool HasFocus { get; set; }
 
@@ -66,7 +66,7 @@ namespace GTAUI
         /// </summary>
         public bool StartTimeoutFinished { get; internal set; }
 
-        internal int startTimeoutFrames { get; set; }
+        internal int StartTimeoutFrames { get; set; }
 
         internal bool IsDisposed { get; set; } = false;
 
@@ -86,7 +86,7 @@ namespace GTAUI
         {
             if (IsFullScreen)
             {
-                Size = new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height);
+                Size = new SizeF(UIController.GetInstance().ScreenSize.Width, UIController.GetInstance().ScreenSize.Height);
                 Position = new PointF(0, 0);
             }
         }
@@ -167,7 +167,7 @@ namespace GTAUI
             }
         }
         /// <summary>
-        /// This method is called bythe <see cref="UIController"/> when the mouse position is different from the last frame.
+        /// This method is called by the <see cref="UIController"/> when the mouse position is different from the last frame.
         /// </summary>
         /// <param name="position">The new position of the mouse.</param>
         protected virtual void OnMouseMove(PointF position)
@@ -265,18 +265,18 @@ namespace GTAUI
         /// </summary>
         public void Register()
         {
-            UIController.instance.AddComponent(this);
+            UIController.GetInstance().AddComponent(this);
         }
 
         /// <summary>
-        /// Translate a point withing the bounds of the component to an absolute position in screen coordinates by adding the given positioin to the position of one or more parent components. 
+        /// Translate a point withing the bounds of the component to an absolute position in screen coordinates by adding the given position to the position of one or more parent components. 
         /// </summary>
         /// <param name="position">The position to translate.</param>
         /// <returns>The translated position.</returns>
         public PointF GetActualPosition(PointF position)
         {
             UIComponent currentComponent = this;
-            PointF actualPosition = new PointF();
+            PointF actualPosition = position;
             while (currentComponent != null)
             {
                 actualPosition.X += currentComponent.Position.X;
@@ -299,7 +299,7 @@ namespace GTAUI
         public void Dispose()
         {
             FireDisposed();
-            UIController.instance.RemoveComponent(this);
+            UIController.GetInstance().RemoveComponent(this);
         }
     }
 }

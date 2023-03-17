@@ -12,7 +12,7 @@ namespace GTAUI.Menus.MenuItems
 {
     /// <summary>
     /// Base class for all menu items.
-    /// Provides default implemetations for the <see cref="NativeItem.Activated"/>, <see cref="NativeItem.Selected"/> and <see cref="NativeItem.EnabledChanged"/> events.
+    /// Provides default implementations for the <see cref="NativeItem.Activated"/>, <see cref="NativeItem.Selected"/> and <see cref="NativeItem.EnabledChanged"/> events.
     /// </summary>
     public abstract class MenuItem
     {
@@ -248,10 +248,7 @@ namespace GTAUI.Menus.MenuItems
         /// <param name="e"></param>
         protected void ItemEnabledChanged(object sender, EventArgs e)
         {
-            if (EnabledChangedMethod != null)
-            {
-                EnabledChangedMethod.Invoke(EventTarget, this);
-            }
+            EnabledChangedMethod?.Invoke(EventTarget, this);
         }
 
         /// <summary>
@@ -262,10 +259,7 @@ namespace GTAUI.Menus.MenuItems
         /// <param name="e"></param>
         protected void ItemSelected(object sender, SelectedEventArgs e)
         {
-            if (SelectedItemMethod != null)
-            {
-                SelectedItemMethod.Invoke(EventTarget, this);
-            }
+            SelectedItemMethod?.Invoke(EventTarget, this);
         }
 
         /// <summary>
@@ -276,10 +270,7 @@ namespace GTAUI.Menus.MenuItems
         /// <param name="e"></param>
         protected void ItemActivated(object sender, EventArgs e)
         {
-            if (ActivatedMethod != null)
-            {
-                ActivatedMethod.Invoke(EventTarget, this);
-            }
+            ActivatedMethod?.Invoke(EventTarget, this);
         }
 
 

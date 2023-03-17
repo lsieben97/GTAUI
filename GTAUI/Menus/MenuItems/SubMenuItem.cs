@@ -100,7 +100,7 @@ namespace GTAUI.Menus.MenuItems
 
         private Menu GetSubMenu(object eventTarget, Type eventTargetType)
         {
-            MethodInfo getMenuMethod = ReflectionHelper.GetMehodWithReturnType(GetSubmenuFunc, typeof(Menu), eventTargetType);
+            MethodInfo getMenuMethod = ReflectionHelper.GetMethodWithReturnType(GetSubmenuFunc, typeof(Menu), eventTargetType);
             if (getMenuMethod != null)
             {
                 return (Menu)getMenuMethod.Invoke(eventTarget, new object[] { });
@@ -111,7 +111,7 @@ namespace GTAUI.Menus.MenuItems
                 return null;
             }
 
-            return UIController.instance.GetMenuInstance(SubmenuName);
+            return UIController.GetInstance().GetMenuInstance(SubmenuName);
         }
 
         /// <inheritdoc/>

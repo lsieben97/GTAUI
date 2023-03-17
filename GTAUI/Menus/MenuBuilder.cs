@@ -13,7 +13,7 @@ namespace GTAUI.Menus
     /// </summary>
     public class MenuBuilder
     {
-        private Menu menu;
+        private readonly Menu menu;
 
         /// <summary>
         /// Create a new builder to build a menu with an empty title and description.

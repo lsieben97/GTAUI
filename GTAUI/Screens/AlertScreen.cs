@@ -18,7 +18,7 @@ namespace GTAUI.Screens
     /// </summary>
     public class AlertScreen : UIComponent
     {
-        private UIStyle uiStyle = UIStyle.GetInstance();
+        private readonly UIStyle uiStyle = UIStyle.GetInstance();
         private ScaledRectangle backgroundRectangle;
         private ScaledText promptText;
         private ScaledText buttonHelpText;
@@ -73,13 +73,13 @@ namespace GTAUI.Screens
         /// </summary>
         /// <param name="prompt">The prompt of the alert.</param>
         /// <param name="message">The message of the alert.</param>
-        /// <param name="acccepted">Action to execute if the alert was accepted.</param>
+        /// <param name="accepted">Action to execute if the alert was accepted.</param>
         /// <param name="canceled">Action to execute if the alert was canceled.</param>
-        public AlertScreen(string prompt, string message, Action acccepted, Action canceled)
+        public AlertScreen(string prompt, string message, Action accepted, Action canceled)
         {
             Prompt = prompt;
             Message = message;
-            Accepted = acccepted;
+            Accepted = accepted;
             Canceled = canceled;
 
             NeedsGameControlsDisabled = true;
@@ -104,22 +104,22 @@ namespace GTAUI.Screens
             GTA.UI.Font helpTextFont = uiStyle.GetStyleProperty<GTA.UI.Font>("gtaui.alertScreen.helpTextFont");
             Color helpTextColor = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.helpTextColor");
             Point helpTextOffset = uiStyle.GetStyleProperty<Point>("gtaui.alertScreen.helpTextOffset");
-            string helptTextText = uiStyle.GetStyleProperty<string>("gtaui.alertScreen.helpTextText");
+            string helpTextText = uiStyle.GetStyleProperty<string>("gtaui.alertScreen.helpTextText");
 
             promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
             promptText.Color = promptColor;
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+            promptText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
 
             descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
             descriptionText.Color = descriptionColor;
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
+            descriptionText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
 
-            buttonHelpText = new ScaledText(new PointF(), helptTextText, helpTextFontSize, helpTextFont);
+            buttonHelpText = new ScaledText(new PointF(), helpTextText, helpTextFontSize, helpTextFont);
             buttonHelpText.Alignment = Alignment.Right;
             buttonHelpText.Color = helpTextColor;
-            buttonHelpText.Position = new PointF(UIController.instance.ScreenSize.Width - helpTextOffset.X, UIController.instance.ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
+            buttonHelpText.Position = new PointF(UIController.GetInstance().ScreenSize.Width - helpTextOffset.X, UIController.GetInstance().ScreenSize.Height - (helpTextOffset.Y + buttonHelpText.LineHeight));
 
-            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
+            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.GetInstance().ScreenSize.Width, UIController.GetInstance().ScreenSize.Height));
             backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.alertScreen.backgroundColor");
         }
 
@@ -131,7 +131,7 @@ namespace GTAUI.Screens
         {
             Prompt = prompt;
             promptText.Text = prompt;
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, 300);
+            promptText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - promptText.Width / 2, 300);
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace GTAUI.Screens
         {
             Message = message;
             descriptionText.Text = message;
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
+            descriptionText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
         }
 
         protected override void OnKeyUp(KeyEventArgs e)

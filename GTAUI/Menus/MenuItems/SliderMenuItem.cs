@@ -103,15 +103,12 @@ namespace GTAUI.Menus.MenuItems
 
         private void ItemValueChanged(object sender, EventArgs e)
         {
-            if (itemSelectedMethod != null)
-            {
-                itemSelectedMethod.Invoke(EventTarget, this, (Item as NativeSliderItem).Value);
-            }
+            itemSelectedMethod?.Invoke(EventTarget, this, (Item as NativeSliderItem).Value);
         }
 
         private int GetMaximum(object eventTarget)
         {
-            MethodInfo getMaximumMethod = ReflectionHelper.GetMehodWithReturnType(GetMaximumFunc, typeof(int), EventTargetType);
+            MethodInfo getMaximumMethod = ReflectionHelper.GetMethodWithReturnType(GetMaximumFunc, typeof(int), EventTargetType);
             if (getMaximumMethod == null)
             {
                 return Maximum;

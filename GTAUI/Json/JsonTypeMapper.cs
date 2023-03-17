@@ -15,7 +15,7 @@ namespace GTAUI
 	{
 		private static JsonTypeMapper instance;
 
-		private Dictionary<string, Dictionary<string, Type>> typeMaps = new Dictionary<string, Dictionary<string, Type>>();
+		private readonly Dictionary<string, Dictionary<string, Type>> typeMaps = new Dictionary<string, Dictionary<string, Type>>();
 
         /// <summary>
         /// Get the current <see cref="JsonTypeMapper"/> instance.

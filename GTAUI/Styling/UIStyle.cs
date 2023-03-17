@@ -12,7 +12,7 @@ namespace GTAUI.Styling
     {
         private static UIStyle instance;
 
-        private List<StyleProperty> properties = new List<StyleProperty>();
+        private readonly List<StyleProperty> properties = new List<StyleProperty>();
 
         /// <summary>
         /// Fired when any of the style properties change by calling <see cref="ApplyStyle(string)"/> or <see cref="ResetStyleProperties"/>.
@@ -36,7 +36,7 @@ namespace GTAUI.Styling
         /// <returns><c>true</c> when the loading of the style properties succeeded, <c>false</c> otherwise.</returns>
         public bool RegisterStylingProperties(string uiResourcePath)
         {
-            string json = UIController.instance.GetUIResource(uiResourcePath);
+            string json = UIController.GetInstance().GetUIResource(uiResourcePath);
             if (json == null)
             {
                 return false;
@@ -78,7 +78,7 @@ namespace GTAUI.Styling
         /// <returns><c>true</c> when the loading of the style properties succeeded, <c>false</c> otherwise.</returns>
         public bool ApplyStyle(string uiResourcePath)
         {
-            string json = UIController.instance.GetUIResource(uiResourcePath);
+            string json = UIController.GetInstance().GetUIResource(uiResourcePath);
             if (json == null)
             {
                 return false;
@@ -126,13 +126,13 @@ namespace GTAUI.Styling
             if (propertyObject == null)
             {
                 UIController.Log($"Unable to find style property with the name '{property}'");
-                return default(T);
+                return default;
             }
 
             if (typeof(T) != propertyObject.ActualType)
             {
                 UIController.Log($"Invalid generic type argument given. Expected {propertyObject.ActualType}, got {typeof(T)}.");
-                return default(T);
+                return default;
             }
 
             return (T)propertyObject.ActualValue;

@@ -21,7 +21,7 @@ using System.Windows.Forms;
 namespace GTAUI
 {
     /// <summary>
-    /// This class controlls all UI displayed via GTAUI.
+    /// This class controls all UI displayed via GTAUI.
     /// It's <see cref="OnTick"/>, <see cref="OnKeyDown(KeyEventArgs)"/> and <see cref="OnKeyUp(KeyEventArgs)"/> methods should be called when the parent <see cref="Script"/> object receives the same events.
     /// To Actually use this class, Create an instance of any class inheriting from <see cref="UIComponent"/> and call <see cref="UIComponent.Register"/>.
     /// Note: Some objects also require to call the <see cref="UIComponent.Show"/> method.
@@ -30,10 +30,11 @@ namespace GTAUI
     {
         private const int GAME_CONTROL_DELAY_FRAME_AMOUNT = 20;
         private const int COMPONENT_START_DELAY_FRAME_AMOUNT = 20;
-        internal static UIController instance { get; set; }
+
+        private static UIController instance;
 
         /// <summary>
-        /// Get the current screensize.
+        /// Get the current screen size.
         /// </summary>
         public Size ScreenSize { get => GTA.UI.Screen.Resolution; }
         public Version GTAUIVersion => gtauiVersion;
@@ -51,7 +52,7 @@ namespace GTAUI
         private bool gameControlWasDisabledLastFrame = false;
         private bool disableGameControl = false;
         private int gameControlDisabledDelayCounter = 0;
-        private bool showCursor = false;
+        private readonly bool showCursor = false;
         private float previousMouseX = 0;
         private float previousMouseY = 0;
         private float previousMouseAccept = 0;
@@ -341,7 +342,7 @@ namespace GTAUI
                     component.IsInitialized = true;
                     if (component.NeedsStartTimeout)
                     {
-                        component.startTimeoutFrames = COMPONENT_START_DELAY_FRAME_AMOUNT;
+                        component.StartTimeoutFrames = COMPONENT_START_DELAY_FRAME_AMOUNT;
                     }
                     else
                     {
@@ -349,9 +350,9 @@ namespace GTAUI
                     }
                 }
 
-                if (component.startTimeoutFrames > 0)
+                if (component.StartTimeoutFrames > 0)
                 {
-                    component.startTimeoutFrames--;
+                    component.StartTimeoutFrames--;
                     component.FireUpdate();
 
                     if (component.Visible)
@@ -455,7 +456,7 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                if ((component.Visible || component.AlwaysNeedsInput) && component.startTimeoutFrames == 0)
+                if ((component.Visible || component.AlwaysNeedsInput) && component.StartTimeoutFrames == 0)
                 {
                     component.FireKeyDown(e);
                 }
@@ -480,7 +481,7 @@ namespace GTAUI
             isIterating = true;
             foreach (UIComponent component in components)
             {
-                if ((component.Visible || component.AlwaysNeedsInput) && component.startTimeoutFrames == 0)
+                if ((component.Visible || component.AlwaysNeedsInput) && component.StartTimeoutFrames == 0)
                 {
                     component.FireKeyUp(e);
                 }
@@ -491,8 +492,8 @@ namespace GTAUI
         }
 
         /// <summary>
-        /// Add a component to the component list handeled by the UIController.
-        /// Calling this method is no guarantee that the given component will be added. If the coltroller is currently iterating over all components, the given component will be added next frame (game tick).
+        /// Add a component to the component list handled by the UIController.
+        /// Calling this method is no guarantee that the given component will be added. If the controller is currently iterating over all components, the given component will be added next frame (game tick).
         /// </summary>
         /// <param name="component">The component to add</param>
         public void AddComponent(UIComponent component)
@@ -508,8 +509,8 @@ namespace GTAUI
         }
 
         /// <summary>
-        /// Remove a component from the component list handeled by the UIController.
-        /// Calling this method is no guarantee that the given component will be removed. If the coltroller is currently iterating over all components, the given component will be removed next frame (game tick).
+        /// Remove a component from the component list handled by the UIController.
+        /// Calling this method is no guarantee that the given component will be removed. If the controller is currently iterating over all components, the given component will be removed next frame (game tick).
         /// </summary>
         /// <param name="component">The component to remove</param>
         public void RemoveComponent(UIComponent component)
@@ -525,7 +526,7 @@ namespace GTAUI
         }
 
         /// <summary>
-        /// Register all embeded resources the given assembly has inside.
+        /// Register all embedded resources the given assembly has inside.
         /// This allows you to refer to the resources inside for menu and style definitions.
         /// </summary>
         /// <param name="assembly"></param>
@@ -585,7 +586,7 @@ namespace GTAUI
             }
             catch (Exception ex)
             {
-                Log($"Error while getting UI resource fromn file '{path}': {ex}");
+                Log($"Error while getting UI resource from file '{path}': {ex}");
                 return null;
             }
         }

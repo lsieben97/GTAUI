@@ -57,7 +57,7 @@ namespace GTAUI
         /// <param name="returnType">The type that the method must return.</param>
         /// <param name="targetType">The type that the method must be defined on.</param>
         /// <returns>A method info object representing the method or null if no method was found or the arguments are invalid.</returns>
-        public static MethodInfo GetMehodWithReturnType(string functionName, Type returnType, Type targetType)
+        public static MethodInfo GetMethodWithReturnType(string functionName, Type returnType, Type targetType)
         {
             MethodInfo method = targetType.GetMethods().FirstOrDefault(m => m.Name == functionName);
             if (method == null)
@@ -66,7 +66,7 @@ namespace GTAUI
             }
 
             if (method.ReturnType != returnType) {
-                UIController.Log($"Invalid method signature: method '{functionName}' expected a returntype of {returnType} but got {method.ReturnType}");
+                UIController.Log($"Invalid method signature: method '{functionName}' expected a return type of {returnType} but got {method.ReturnType}");
                 return null;
             }
 

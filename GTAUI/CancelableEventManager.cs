@@ -9,7 +9,7 @@ namespace GTAUI
 {
     internal class CancelableEventManager
     {
-        private List<EventHandler<CancelEventArgs>> subscribersList = new List<EventHandler<CancelEventArgs>>();
+        private readonly List<EventHandler<CancelEventArgs>> subscribersList = new List<EventHandler<CancelEventArgs>>();
 
         internal void AddSubscriber(EventHandler<CancelEventArgs> subscriber)
         {

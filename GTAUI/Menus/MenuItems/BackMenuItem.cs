@@ -22,7 +22,7 @@ namespace GTAUI.Menus.MenuItems
         public BackMenuItem() : this(null) { }
 
         /// <summary>
-        /// Create a new back menu item wich calls the given action when selected.
+        /// Create a new back menu item which calls the given action when selected.
         /// </summary>
         /// <param name="onSelected">The action to call when the item gets selected.</param>
         public BackMenuItem(Action<MenuItem> onSelected)

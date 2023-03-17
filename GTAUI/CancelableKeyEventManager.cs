@@ -10,7 +10,7 @@ namespace GTAUI
 {
     internal class CancelableKeyEventManager
     {
-        private List<EventHandler<KeyEventArgs>> subscribersList = new List<EventHandler<KeyEventArgs>>();
+        private readonly List<EventHandler<KeyEventArgs>> subscribersList = new List<EventHandler<KeyEventArgs>>();
 
         internal void AddSubscriber(EventHandler<KeyEventArgs> subscriber)
         {

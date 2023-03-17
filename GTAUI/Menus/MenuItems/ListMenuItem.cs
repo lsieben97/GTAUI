@@ -102,10 +102,7 @@ namespace GTAUI.Menus.MenuItems
 
         private void ItemItemChanged(object sender, ItemChangedEventArgs<object> e)
         {
-            if (itemSelectedMethod != null)
-            {
-                itemSelectedMethod.Invoke(EventTarget, this, e.Object);
-            }
+            itemSelectedMethod?.Invoke(EventTarget, this, e.Object);
         }
 
         /// <inheritdoc/>
@@ -117,7 +114,7 @@ namespace GTAUI.Menus.MenuItems
 
             ParentMenu = (eventTarget as Menu);
 
-            MethodInfo getListMethod = ReflectionHelper.GetMehodWithReturnType(GetListFunc, typeof(IEnumerable<object>), EventTargetType);
+            MethodInfo getListMethod = ReflectionHelper.GetMethodWithReturnType(GetListFunc, typeof(IEnumerable<object>), EventTargetType);
             if (getListMethod == null)
             {
                 UIController.Log($"Warning: menu item with title {Title} is a list menu item but it's GetList function could not be found. This menu item will not be displayed.");
@@ -125,9 +122,8 @@ namespace GTAUI.Menus.MenuItems
                 return;
             }
 
-            IEnumerable<object> listItems = getListMethod.Invoke(eventTarget, new object[] { }) as IEnumerable<object>;
 
-            if (listItems == null)
+            if ((getListMethod.Invoke(eventTarget, new object[] { }) is IEnumerable<object> listItems) == false)
             {
                 UIController.Log($"Warning: menu item with title {Title} is a list menu item but it's GetList function returned null. This menu item will not be displayed.");
                 IsValid = false;

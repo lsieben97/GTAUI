@@ -24,7 +24,7 @@ namespace GTAUI.Menus
         string GetMenuItemDescription();
 
         /// <summary>
-        /// Return wether the menu item for this object should be enabled.
+        /// Return whether the menu item for this object should be enabled.
         /// </summary>
         /// <returns><c>true</c> if the menu should be enabled, <c>false</c> otherwise.</returns>
         bool IsMenuItemEnabled();

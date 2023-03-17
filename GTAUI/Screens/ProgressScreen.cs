@@ -18,7 +18,7 @@ namespace GTAUI.Screens
     public class ProgressScreen : UIComponent
     {
 
-        private UIStyle uiStyle = UIStyle.GetInstance();
+        private readonly UIStyle uiStyle = UIStyle.GetInstance();
         private ScaledRectangle backgroundRectangle;
         private ScaledText promptText;
         private ScaledText descriptionText;
@@ -86,13 +86,13 @@ namespace GTAUI.Screens
 
             promptText = new ScaledText(new PointF(), Prompt, promptFontSize, promptFont);
             promptText.Color = promptColor;
-            promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
+            promptText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - promptText.Width / 2, promptYPosition);
 
             descriptionText = new ScaledText(new PointF(), Message, descriptionFontSize, descriptionFont);
             descriptionText.Color = descriptionColor;
-            descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
+            descriptionText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - descriptionText.Width / 2, descriptionYPosition);
 
-            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.instance.ScreenSize.Width, UIController.instance.ScreenSize.Height));
+            backgroundRectangle = new ScaledRectangle(new PointF(0, 0), new SizeF(UIController.GetInstance().ScreenSize.Width, UIController.GetInstance().ScreenSize.Height));
             backgroundRectangle.Color = uiStyle.GetStyleProperty<Color>("gtaui.progressScreen.backgroundColor");
 
             progressRectangle = new ScaledRectangle(new PointF(), new SizeF());
@@ -153,7 +153,7 @@ namespace GTAUI.Screens
             if (IsInitialized)
             {
                 promptText.Text = prompt;
-                promptText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - promptText.Width / 2, 300);
+                promptText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - promptText.Width / 2, 300);
             }
         }
 
@@ -167,7 +167,7 @@ namespace GTAUI.Screens
             if (IsInitialized)
             {
                 descriptionText.Text = message;
-                descriptionText.Position = new PointF(UIController.instance.ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
+                descriptionText.Position = new PointF(UIController.GetInstance().ScreenSize.Width / 2 - descriptionText.Width / 2, 400);
             }
         }
 

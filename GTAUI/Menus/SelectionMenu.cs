@@ -13,7 +13,7 @@ namespace GTAUI.Menus
     /// <typeparam name="T">The type of object that can be selected.</typeparam>
     public class SelectionMenu<T> : Menu
     {
-        private UIStyle uiStyle = UIStyle.GetInstance();
+        private readonly UIStyle uiStyle = UIStyle.GetInstance();
         private readonly IEnumerable<T> options;
         private readonly Action<T> onSelection;
         private readonly Action onCancel;
@@ -40,8 +40,8 @@ namespace GTAUI.Menus
         public bool HideDisabledOptions { get; set; }
 
         /// <summary>
-        /// A reference to a function to check wether an option is enabled. if this is <c>null</c>, all options will be enabled.
-        /// The default value is a reference to <see cref="OptionShouldBeEnabled(T)"/> which can be overrridden in a derived class.
+        /// A reference to a function to check whether an option is enabled. if this is <c>null</c>, all options will be enabled.
+        /// The default value is a reference to <see cref="OptionShouldBeEnabled(T)"/> which can be overridden in a derived class.
         /// </summary>
         public Func<T, bool> OptionShouldBeEnabledFunc { get; set; }
 
@@ -130,7 +130,7 @@ namespace GTAUI.Menus
 
         /// <summary>
         /// Create a menu item that acts as a back button.
-        /// Activating this menu item shoud call <see cref="Menu.Back"/>.
+        /// Activating this menu item should call <see cref="Menu.Back"/>.
         /// </summary>
         /// <returns>A menu item that acts as a back button.</returns>
         protected virtual MenuItem CreateBackButton()
@@ -167,7 +167,7 @@ namespace GTAUI.Menus
                 }
                 else
                 {
-                    enabled = item is IMenuSelectable ? (item as IMenuSelectable).IsMenuItemEnabled() : true;
+                    enabled = (item is IMenuSelectable) == false || (item as IMenuSelectable).IsMenuItemEnabled();
                 }
 
 
@@ -204,7 +204,7 @@ namespace GTAUI.Menus
         }
 
         /// <summary>
-        /// Returns wether the given option should be enabled or not.
+        /// Returns whether the given option should be enabled or not.
         /// Note: this method will only be called when <see cref="OptionShouldBeEnabledFunc"/> has it's default value.
         /// </summary>
         /// <param name="option">The option to check.</param>

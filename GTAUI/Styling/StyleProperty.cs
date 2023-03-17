@@ -100,8 +100,7 @@ namespace GTAUI.Styling
 
             if (Type == "font")
             {
-                GTA.UI.Font actualFont;
-                if (Enum.TryParse((string)value, out actualFont))
+                if (Enum.TryParse((string)value, out GTA.UI.Font actualFont))
                 {
                     ActualType = typeof(GTA.UI.Font);
                     return actualFont;
@@ -122,16 +121,14 @@ namespace GTAUI.Styling
                     return null;
                 }
 
-                int x;
-                int y;
 
-                if (int.TryParse(parts[0], out x) == false)
+                if (int.TryParse(parts[0], out int x) == false)
                 {
                     UIController.Log($"Style property {Name} is of type point but it's string value '{value}' contains an invalid x coordinate '{parts[0]}'");
                     return null;
                 }
 
-                if (int.TryParse(parts[1], out y) == false)
+                if (int.TryParse(parts[1], out int y) == false)
                 {
                     UIController.Log($"Style property {Name} is of type point but it's string value '{value}' contains an invalid y coordinate '{parts[1]}'");
                     return null;
@@ -149,16 +146,14 @@ namespace GTAUI.Styling
                     return null;
                 }
 
-                float x;
-                float y;
 
-                if (float.TryParse(parts[0], NumberStyles.Any, new CultureInfo("en-US"), out x) == false)
+                if (float.TryParse(parts[0], NumberStyles.Any, new CultureInfo("en-US"), out float x) == false)
                 {
                     UIController.Log($"Style property {Name} is of type pointF but it's string value '{value}' contains an invalid x coordinate '{parts[0]}'");
                     return null;
                 }
 
-                if (float.TryParse(parts[1], NumberStyles.Any, new CultureInfo("en-US"), out y) == false)
+                if (float.TryParse(parts[1], NumberStyles.Any, new CultureInfo("en-US"), out float y) == false)
                 {
                     UIController.Log($"Style property {Name} is of type pointF but it's string value '{value}' contains an invalid y coordinate '{parts[1]}'");
                     return null;

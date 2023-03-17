@@ -12,7 +12,7 @@ namespace GTAUI.Menus
 {
     /// <summary>
     /// Represents a menu controlled by the <see cref="UIController"/>.
-    /// This class wraps around <see cref="NativeMenu"/> and allows menu's to be instanciated through Json.
+    /// This class wraps around <see cref="NativeMenu"/> and allows menu's to be instantiated through Json.
     /// </summary>
     public class Menu
     {
@@ -75,7 +75,7 @@ namespace GTAUI.Menus
 
         private void InitializeFromUIResource()
         {
-            string menuJson = UIController.instance.GetUIResource(UIResourcePath);
+            string menuJson = UIController.GetInstance().GetUIResource(UIResourcePath);
             if (menuJson == null)
             {
                 string message = $"Unable to load menu {GetType()}: UI resource not found: {UIResourcePath}";
@@ -103,8 +103,8 @@ namespace GTAUI.Menus
 
             MenuInstance = new NativeMenu(string.Empty);
 
-            Title = jsonMenu.Title != null ? jsonMenu.Title : "Menu";
-            SubTitle = jsonMenu.SubTitle != null ? jsonMenu.SubTitle : string.Empty;
+            Title = jsonMenu.Title ?? "Menu";
+            SubTitle = jsonMenu.SubTitle ?? string.Empty;
 
             if (jsonMenu.Items == null)
             {
@@ -168,7 +168,7 @@ namespace GTAUI.Menus
 
             if (MenuInstance.Visible == false)
             {
-                UIController.instance.ShowMenu(this);
+                UIController.GetInstance().ShowMenu(this);
             }
         }
 
@@ -185,7 +185,7 @@ namespace GTAUI.Menus
             }
 
             MenuInstance.Visible = false;
-            UIController.instance.RemoveMenu(this);
+            UIController.GetInstance().RemoveMenu(this);
         }
 
         /// <summary>
@@ -209,13 +209,13 @@ namespace GTAUI.Menus
             
             MenuInstance.Parent.Visible = true;
             MenuInstance.Back();
-            UIController.instance.RemoveMenu(this);
+            UIController.GetInstance().RemoveMenu(this);
         }
 
         /// <summary>
         /// Get the <see cref="MenuItem"/> with the given <paramref name="id"/> or <c>null</c> if there is no menu item with the given id.
         /// </summary>
-        /// <typeparam name="T">The tyoe of menu item.</typeparam>
+        /// <typeparam name="T">The type of menu item.</typeparam>
         /// <param name="id">The id to search for.</param>
         /// <returns>The <see cref="MenuItem"/> with the given <paramref name="id"/> or <c>null</c> if there is no menu item with the given id.</returns>
         /// <exception cref="NullReferenceException"></exception>
@@ -253,7 +253,7 @@ namespace GTAUI.Menus
         }
 
         /// <summary>
-        /// Set the given menu as this menu's parent manu.
+        /// Set the given menu as this menu's parent menu.
         /// If this menu's <see cref="Back"/> method is called the given menu is shown after this menu is hidden.
         /// </summary>
         /// <seealso cref="Back"/>
@@ -270,7 +270,7 @@ namespace GTAUI.Menus
         }
 
         /// <summary>
-        /// Set the given menu as this menu's parent manu.
+        /// Set the given menu as this menu's parent menu.
         /// If this menu's <see cref="Back"/> method is called the given menu is shown after this menu is hidden.
         /// </summary>
         /// <param name="parentMenu"></param>
@@ -287,7 +287,7 @@ namespace GTAUI.Menus
 
         /// <summary>
         /// Called before the menu is shown.
-        /// Usefull to lazy load menu items and such.
+        /// Useful to lazy load menu items and such.
         /// </summary>
         /// <returns><c>true</c> if the menu should be shown. <c>false</c> otherwise.</returns>
         protected virtual bool BeforeShow() => true;
