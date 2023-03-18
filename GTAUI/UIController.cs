@@ -67,6 +67,11 @@ namespace GTAUI
         private readonly CancelableKeyEventManager beforeKeyUpHandledEventManager = new CancelableKeyEventManager();
 
         /// <summary>
+        /// The current mouse state. Updates every frame.
+        /// </summary>
+        public MouseState MouseState { get; private set; } = new MouseState();
+
+        /// <summary>
         /// Fired after the UI controller is done handling a tick event coming from a <see cref="Script"/>.
         /// </summary>
         public event EventHandler TickHandled;
@@ -369,21 +374,64 @@ namespace GTAUI
                     component.StartTimeoutFinished = true;
                 }
 
+                MouseState.CurrentPosition = new PointF(actualX, actualY);
+                MouseState.MouseButtons = actualMouseButtons;
+                if (shouldFireMouseScroll)
+                {
+                    MouseState.ScrollDirection = cursorScrollDown > 0 ? ScrollDirection.Down : ScrollDirection.Up;
+                }
+                else
+                {
+                    MouseState.ScrollDirection = ScrollDirection.None;
+                }
+
                 component.FireUpdate();
 
                 if (component.Visible || component.AlwaysNeedsInput)
                 {
-                    if (shouldFireMouseMove)
+                    bool shouldFireMouseEventsForThisComponent = true;
+                    bool hitTestDone = false;
+
+                    if (component.Visible && component.NeedsPositionalMouseEvents && component.wasInvisible)
                     {
+                        component.wasInvisible = false;
+                        shouldFireMouseEventsForThisComponent = DoHitTestOnComponent(component, actualX, actualY);
+                        hitTestDone = true;
+                        if (shouldFireMouseEventsForThisComponent)
+                        {
+                            component.FireMouseEnter(new PointF(actualX, actualY));
+                        }
+                    }
+
+                    if (component.NeedsPositionalMouseEvents && hitTestDone == false)
+                    {
+                        shouldFireMouseEventsForThisComponent = DoHitTestOnComponent(component, actualX, actualY);
+                    }
+
+                    if (shouldFireMouseEventsForThisComponent == false && component.wasMouseInBounds == true)
+                    {
+                        component.wasMouseInBounds = false;
+                        component.FireMouseLeave(new PointF(actualX, actualY));
+                    }
+
+
+                    if (shouldFireMouseMove && shouldFireMouseEventsForThisComponent)
+                    {
+                        if (component.NeedsPositionalMouseEvents && component.wasMouseInBounds == false)
+                        {
+                            component.wasMouseInBounds = true;
+                            component.FireMouseEnter(new PointF(actualX, actualY));
+                        }
+
                         component.FireMouseMove(new PointF(actualX, actualY));
                     }
 
-                    if (shouldFireMouseButtons)
+                    if (shouldFireMouseButtons && shouldFireMouseEventsForThisComponent)
                     {
                         component.FireMouseButtonDown(actualMouseButtons);
                     }
 
-                    if (shouldFireMouseScroll)
+                    if (shouldFireMouseScroll && shouldFireMouseEventsForThisComponent)
                     {
                         if (cursorScrollDown > 0)
                         {
@@ -393,6 +441,15 @@ namespace GTAUI
                         {
                             component.FireMouseScroll(ScrollDirection.Up);
                         }
+                    }
+                }
+                else if (component.Visible == false && component.NeedsPositionalMouseEvents && component.wasInvisible == false)
+                {
+                    component.wasInvisible = true;
+                    bool shouldFireMouseEventsForThisComponent = DoHitTestOnComponent(component, actualX, actualY);
+                    if (shouldFireMouseEventsForThisComponent)
+                    {
+                        component.FireMouseLeave(new PointF(actualX, actualY));
                     }
                 }
 
@@ -444,6 +501,76 @@ namespace GTAUI
             {
                 EnableGameControl();
             }
+        }
+
+        /// <summary>
+        /// Checks if the current mouse position is in the component's <see cref="UIComponent.Bounds"/> and that no other component are on top of the given component.
+        /// </summary>
+        /// <param name="component">The component to check.</param>
+        /// <returns><c>true</c> if the current mouse position is in the component's bounds and there are no other components on top. <c>false</c> otherwise.</returns>
+        public bool DoHitTestOnComponent(UIComponent component)
+        {
+            return DoHitTestOnComponent(component, MouseState.CurrentPosition);
+        }
+
+        /// <summary>
+        /// Checks if the given position is in the component's <see cref="UIComponent.Bounds"/> and that no other component are on top of the given component.
+        /// </summary>
+        /// <param name="component">The component to check.</param>
+        /// <param name="position">The position</param>
+        /// <returns><c>true</c> if the given position is in the component's bounds and there are no other components on top. <c>false</c> otherwise.</returns>
+        public bool DoHitTestOnComponent(UIComponent component, PointF position)
+        {
+            return DoHitTestOnComponent(component, position.X, position.Y);
+        }
+
+        /// <summary>
+        /// Checks if the given position is in the component's <see cref="UIComponent.Bounds"/> and that no other component are on top of the given component.
+        /// </summary>
+        /// <param name="component">The component to check.</param>
+        /// <param name="x">The x position.</param>
+        /// <param name="y">The y position.</param>
+        /// <returns><c>true</c> if the given position is in the component's bounds and there are no other components on top. <c>false</c> otherwise.</returns>
+        public bool DoHitTestOnComponent(UIComponent component, float x, float y)
+        {
+            if (IsTopLevelComponent(component) == false || component.NeedsPositionalMouseEvents == false)
+            {
+                return false;
+            }
+
+            bool result = true;
+            if (component.NeedsPositionalMouseEvents && component.Bounds.Contains(x, y) == false)
+            {
+                result = false;
+            }
+
+            if (component.NeedsPositionalMouseEvents && result)
+            {
+                for (int i = components.IndexOf(component) + 1; i < components.Count; i++)
+                {
+                    if (components[i].Visible == false)
+                    {
+                        continue;
+                    }
+
+                    if (components[i].Bounds.Contains(x, y))
+                    {
+                        result = false;
+                        break;
+                    }
+                }
+            }
+            return result;
+        }
+
+        /// <summary>
+        /// Returns if the given component is a top level component.
+        /// </summary>
+        /// <param name="component">The component to check.</param>
+        /// <returns><c>true</c> if the given component is a top level component. <c>false</c> otherwise.</returns>
+        public bool IsTopLevelComponent(UIComponent component)
+        {
+            return components.Contains(component);
         }
 
         /// <summary>
@@ -759,7 +886,7 @@ namespace GTAUI
         /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
         /// </summary>
         /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
-        public void ScheduleAfterIterationAction<T,T2>(Action<T,T2> action, T arg, T2 arg2)
+        public void ScheduleAfterIterationAction<T, T2>(Action<T, T2> action, T arg, T2 arg2)
         {
             Utils.CheckNotNull(action, nameof(action));
 

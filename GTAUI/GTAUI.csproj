@@ -79,6 +79,7 @@
     <Compile Include="Menus\MenuItems\SliderMenuItem.cs" />
     <Compile Include="Menus\MenuItems\SubMenuItem.cs" />
     <Compile Include="Menus\SelectionMenu.cs" />
+    <Compile Include="MouseState.cs" />
     <Compile Include="ReflectionUtils.cs" />
     <Compile Include="Screens\AlertScreen.cs" />
     <Compile Include="Screens\InputScreen.cs" />

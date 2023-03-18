@@ -12,6 +12,7 @@ namespace GTAUI
     public enum ScrollDirection
     {
         Up,
-        Down
+        Down,
+        None
     }
 }

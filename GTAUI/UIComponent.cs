@@ -30,6 +30,11 @@ namespace GTAUI
         public PointF Position { get; set; } = new PointF();
 
         /// <summary>
+        /// The bounds of the component, created with the <see cref="Position"/> and <see cref="Size"/> properties.
+        /// </summary>
+        public RectangleF Bounds { get => new RectangleF(Position, Size); }
+
+        /// <summary>
         /// <c>true</c> if the component has the same size as the screen. Setting this to <c>true</c> causes the component to automatically set the <see cref="Size"/> to the same value as <see cref="UIController.ScreenSize"/>.
         /// </summary>
         public bool IsFullScreen { get; set; } = false;
@@ -46,6 +51,11 @@ namespace GTAUI
         public bool NeedsVisibleMouseCursor { get; set; } = false;
 
         /// <summary>
+        /// <c>true</c> if the component only needs mouse events when the mouse is in the <see cref="Bounds"/> of the component and no other component is on top of this component.
+        /// </summary>
+        public bool NeedsPositionalMouseEvents { get; set; } = false;
+
+        /// <summary>
         /// <c>true</c> if the component has focus. Not used by the <see cref="UIController"/> but handy for determining whether the component needs to handle keyboard and mouse events.
         /// </summary>
         public bool HasFocus { get; set; }
@@ -54,7 +64,7 @@ namespace GTAUI
         /// <c>true</c> if the component always needs mouse and keyboard input events sent to it, even if it's not visible.
         /// </summary>
         public bool AlwaysNeedsInput { get; set; } = false;
-        
+
         /// <summary>
         /// <c>true</c> if the <see cref="UIController"/> should block user input for a small amount of time when the component is registered.
         /// This is useful if you don't want this component to respond to previous user input like accepting a menu or typing in a textbox.
@@ -71,6 +81,9 @@ namespace GTAUI
         internal bool IsDisposed { get; set; } = false;
 
         internal bool IsInitialized { get; set; } = false;
+
+        internal bool wasMouseInBounds { get; set; } = false;
+        internal bool wasInvisible { get; set; } = true;
 
         /// <summary>
         /// The parent of the component or <c>null</c> if there is no parent.
@@ -96,7 +109,7 @@ namespace GTAUI
             OnKeyDown(e);
 
             foreach (UIComponent component in ChildComponents)
-            { 
+            {
                 component.FireKeyDown(e);
             }
         }
@@ -216,6 +229,44 @@ namespace GTAUI
             {
                 component.FireUpdate();
             }
+        }
+
+        internal void FireMouseEnter(PointF position)
+        {
+            OnMouseEnter(position);
+            foreach (UIComponent component in ChildComponents)
+            {
+                component.FireMouseEnter(position);
+            }
+        }
+
+        /// <summary>
+        /// This method is called on the frame the mouse cursor enters the <see cref="Bounds"/> of the component.
+        /// Will only be called when <see cref="NeedsPositionalMouseEvents"/> is set to <c>true</c>.
+        /// </summary>
+        /// <param name="position">The position of the mouse.</param>
+        protected virtual void OnMouseEnter(PointF position)
+        {
+
+        }
+
+        internal void FireMouseLeave(PointF position)
+        {
+            OnMouseLeave(position);
+            foreach (UIComponent component in ChildComponents)
+            {
+                component.FireMouseLeave(position);
+            }
+        }
+
+        /// <summary>
+        /// This method is called on the frame the mouse cursor leaves the <see cref="Bounds"/> of the component.
+        /// Will only be called when <see cref="NeedsPositionalMouseEvents"/> is set to <c>true</c>.
+        /// </summary>
+        /// <param name="position">The position of the mouse.</param>
+        protected virtual void OnMouseLeave(PointF position)
+        {
+
         }
 
         /// <summary>
