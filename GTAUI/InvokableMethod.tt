@@ -1,10 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+<#
+int max = 16;
+#>
+using System;
 using System.Reflection;
-using System.Runtime.InteropServices.ComTypes;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GTAUI
 {
@@ -66,20 +70,33 @@ namespace GTAUI
             return action == null && methodInfo == null;
         }
     }
+<#
+string tArguments = "T";
+string argumentsDeclaration = "T argument";
+string argumentsList = "argument";
+for (int i = 1; i<=max; i++)
+{ 
+if (i > 1)
+{
+    tArguments += ", T" + i;
+    argumentsDeclaration += ", T" + i + " argument" + i;
+    argumentsList += ", argument" + i;
+}
+#>
 
     /// <summary>
-    /// Wrapper class for either a <see cref="MethodInfo"/> object or an <see cref="Action{T}"/> delegate.
+    /// Wrapper class for either a <see cref="MethodInfo"/> object or an <see cref="Action{<#= tArguments #>}"/> delegate.
     /// </summary>
-    public class InvokableMethod<T>
+    public class InvokableMethod<<#= tArguments #>>
     {
-        private readonly Action<T> action;
+        private readonly Action<<#= tArguments #>> action;
         private readonly MethodInfo methodInfo = null;
 
         /// <summary>
         /// Create a new InvokableMethod with the given action.
         /// </summary>
         /// <param name="action">The action to wrap.</param>
-        public InvokableMethod(Action<T> action)
+        public InvokableMethod(Action<<#= tArguments #>> action)
         {
             this.action = action;
         }
@@ -99,16 +116,16 @@ namespace GTAUI
         /// <param name="target">The target to execute the method on.</param>
         /// <param name="argument">The argument of the action or method.</param>
         /// <returns>The return value of the method. Invoking the action will always return null.</returns>
-        public object Invoke(object target, T argument)
+        public object Invoke(object target, <#= argumentsDeclaration #>)
         {
             if (action != null)
             {
-                action(argument);
+                action(<#= argumentsList #>);
                 return null;
             }
             else if (methodInfo != null)
             {
-                return methodInfo.Invoke(target, new object[] { argument });
+                return methodInfo.Invoke(target, new object[] { <#= argumentsList #> });
             }
 
             return null;
@@ -116,7 +133,7 @@ namespace GTAUI
 
         /// <summary>
         /// Check whether the wrapped action and method are both null.
-        /// If this returns <c>true</c>, calling the <see cref="Invoke(object, T)"/> method will do nothing.
+        /// If this returns <c>true</c>, calling the <see cref="Invoke(object, <#= tArguments #>)"/> method will do nothing.
         /// </summary>
         /// <returns><c>true</c> if both the wrapped action and method are null.</returns>
         public bool IsNull()
@@ -124,62 +141,5 @@ namespace GTAUI
             return action == null && methodInfo == null;
         }
     }
-
-    /// <summary>
-    /// Wrapper class for either a <see cref="MethodInfo"/> object or an <see cref="Action{T1, T2}"/> delegate.
-    /// </summary>
-    public class InvokableMethod<T, T2>
-    {
-        private readonly Action<T, T2> action;
-        private readonly MethodInfo methodInfo = null;
-
-        /// <summary>
-        /// Create a new InvokableMethod with the given action.
-        /// </summary>
-        /// <param name="action">The action to wrap.</param>
-        public InvokableMethod(Action<T, T2> action)
-        {
-            this.action = action;
-        }
-
-        /// <summary>
-        /// Create a new InvokableMethod with the given action.
-        /// </summary>
-        /// <param name="methodInfo">The MethodInfo object to wrap.</param>
-        public InvokableMethod(MethodInfo methodInfo)
-        {
-            this.methodInfo = methodInfo;
-        }
-
-        /// <summary>
-        /// Invoke The action if it's not null. if it is, try to invoke the method if that is not null.
-        /// </summary>
-        /// <param name="target">The target to execute the method on.</param>
-        /// <param name="argument1">The first argument of the action or method.</param>
-        /// <param name="argument2">The second argument of the action or method.</param>
-        /// <returns>The return value of the method. Invoking the action will always return null.</returns>
-        public object Invoke(object target, T argument1, T2 argument2)
-        {
-            if (action != null)
-            {
-                action(argument1, argument2);
-                return null;
-            }
-            else if (methodInfo != null)
-            {
-                return methodInfo.Invoke(target, new object[] { argument1, argument2 });
-            }
-            return null;
-        }
-
-        /// <summary>
-        /// Check whether the wrapped action and method are both null.
-        /// If this returns <c>true</c>, calling the <see cref="Invoke(object, T, T2)"/> method will do nothing.
-        /// </summary>
-        /// <returns><c>true</c> if both the wrapped action and method are null.</returns>
-        public bool IsNull()
-        {
-            return action == null && methodInfo == null;
-        }
-    }
+    <# } #>
 }

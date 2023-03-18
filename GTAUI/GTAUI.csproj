@@ -61,7 +61,11 @@
     <Compile Include="CancelableEventManager.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Internal\ScheduledAction.cs" />
-    <Compile Include="InvokableMethod.cs" />
+    <Compile Include="InvokableMethod1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InvokableMethod.tt</DependentUpon>
+    </Compile>
     <Compile Include="Menus\IMenuSelectable.cs" />
     <Compile Include="Menus\JsonMenu.cs" />
     <Compile Include="Menus\Menu.cs" />
@@ -96,7 +100,15 @@
   <ItemGroup>
     <EmbeddedResource Include="resources\builtinStyleProperties.json" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="InvokableMethod.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InvokableMethod1.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>COPY "$(TargetDir)GTAUI.dll" "D:\Games\steamapps\common\Grand Theft Auto V\scripts"

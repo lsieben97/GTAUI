@@ -772,6 +772,272 @@ namespace GTAUI
             scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2 }));
         }
 
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3>(Action<T, T2, T3> action, T arg, T2 arg2, T3 arg3)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4>(Action<T, T2, T3, T4> action, T arg, T2 arg2, T3 arg3, T4 arg4)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5>(Action<T, T2, T3, T4, T5> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6>(Action<T, T2, T3, T4, T5, T6> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7>(Action<T, T2, T3, T4, T5, T6, T7> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8>(Action<T, T2, T3, T4, T5, T6, T7, T8> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15 }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16>(Action<T, T2, T3, T4, T5, T6, T7, T8, T9, T10, T11, T12, T13, T14, T15, T16> action, T arg, T2 arg2, T3 arg3, T4 arg4, T5 arg5, T6 arg6, T7 arg7, T8 arg8, T9 arg9, T10 arg10, T11 arg11, T12 arg12, T13 arg13, T14 arg14, T15 arg15, T16 arg16)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2, arg3, arg4, arg5, arg6, arg7, arg8, arg9, arg10, arg11, arg12, arg13, arg14, arg15, arg16 }));
+        }
+
         private void InvokeScheduledAfterIterationActions()
         {
             foreach (ScheduledAction action in scheduledActions)
