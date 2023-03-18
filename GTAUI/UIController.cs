@@ -1,4 +1,5 @@
 ﻿using GTA;
+using GTAUI.Internal;
 using GTAUI.Menus;
 using GTAUI.Menus.MenuItems;
 using GTAUI.Styling;
@@ -58,6 +59,7 @@ namespace GTAUI
         private float previousMouseAccept = 0;
         private float previousMouseCancel = 0;
         private List<Menus.Menu> menus = new List<Menus.Menu>();
+        private readonly List<ScheduledAction> scheduledActions = new List<ScheduledAction>();
         private readonly Version gtauiVersion;
 
         private readonly CancelableEventManager beforeTickHandledEventManager = new CancelableEventManager();
@@ -407,6 +409,8 @@ namespace GTAUI
             previousMouseAccept = cursorAccept;
             previousMouseCancel = cursorCancel;
 
+            InvokeScheduledAfterIterationActions();
+
             TickHandled?.Invoke(this, EventArgs.Empty);
         }
 
@@ -681,6 +685,104 @@ namespace GTAUI
                {"Submenu", typeof(SubMenuItem) },
             });
         }
+
+        /// <summary>
+        /// Paint the given component last to make sure it is always on top of other components.
+        /// <paramref name="component"/> must be a top-level component.
+        /// </summary>
+        /// <param name="component">The component to make topmost.</param>
+        public void SetTopmostComponent(UIComponent component)
+        {
+            Utils.CheckNotNull(component, nameof(component));
+
+            if (components.Contains(component) == false)
+            {
+                return;
+            }
+
+            ScheduleAfterIterationAction(DoSetFrontmostComponent, component);
+        }
+
+        private void DoSetFrontmostComponent(UIComponent component)
+        {
+            if (components.Contains(component) == false)
+            {
+                return;
+            }
+
+            components.Remove(component);
+            components.Insert(components.Count, component);
+        }
+
+        #region Scheduled actions
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction(Action action)
+        {
+            Utils.CheckNotNull(action, "action");
+
+            if (isIterating == false)
+            {
+                action();
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { }));
+        }
+
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T>(Action<T> action, T arg)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg }));
+        }
+        /// <summary>
+        /// Schedule the given action to be invoked when the <see cref="UIController"/> is done iterating the components it manages.
+        /// Functions like <see cref="AddComponent(UIComponent)"/> and <see cref="RemoveComponent(UIComponent)"/> are guaranteed to execute immediately instead of buffering the action until the next frame.
+        /// If the <see cref="UIController"/> is not iterating currently, the action will be invoked immediately.
+        /// </summary>
+        /// <param name="action">The action to execute when the <see cref="UIController"/> is done iterating over components.</param>
+        public void ScheduleAfterIterationAction<T,T2>(Action<T,T2> action, T arg, T2 arg2)
+        {
+            Utils.CheckNotNull(action, nameof(action));
+
+            if (isIterating == false)
+            {
+                action(arg, arg2);
+                return;
+            }
+
+            scheduledActions.Add(new ScheduledAction(action.Method, action.Target, new object[] { arg, arg2 }));
+        }
+
+        private void InvokeScheduledAfterIterationActions()
+        {
+            foreach (ScheduledAction action in scheduledActions)
+            {
+                action.Invoke();
+            }
+
+            scheduledActions.Clear();
+        }
+
+        #endregion
 
         internal static void Log(string message)
         {

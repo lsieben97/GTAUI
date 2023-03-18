@@ -60,6 +60,7 @@
     <Compile Include="CancelableKeyEventManager.cs" />
     <Compile Include="CancelableEventManager.cs" />
     <Compile Include="Extensions.cs" />
+    <Compile Include="Internal\ScheduledAction.cs" />
     <Compile Include="InvokableMethod.cs" />
     <Compile Include="Menus\IMenuSelectable.cs" />
     <Compile Include="Menus\JsonMenu.cs" />
