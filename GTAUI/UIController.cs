@@ -3,6 +3,7 @@ using GTAUI.Internal;
 using GTAUI.Menus;
 using GTAUI.Menus.MenuItems;
 using GTAUI.Styling;
+using GTAUI.UIResources;
 using LemonUI;
 using LemonUI.Elements;
 using LemonUI.Menus;
@@ -42,7 +43,6 @@ namespace GTAUI
 
         private bool isInitialized = false;
         private List<UIComponent> components;
-        private Dictionary<Assembly, string[]> assemblyResources;
         private bool isIterating = false;
         private List<UIComponent> componentsToAdd;
         private List<UIComponent> componentsToRemove;
@@ -65,6 +65,8 @@ namespace GTAUI
         private readonly CancelableEventManager beforeTickHandledEventManager = new CancelableEventManager();
         private readonly CancelableKeyEventManager beforeKeyDownHandledEventManager = new CancelableKeyEventManager();
         private readonly CancelableKeyEventManager beforeKeyUpHandledEventManager = new CancelableKeyEventManager();
+
+        private readonly UIResourceManager uiResourceManager = new UIResourceManager();
 
         /// <summary>
         /// The current mouse state. Updates every frame.
@@ -213,7 +215,7 @@ namespace GTAUI
             System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
 
             components = new List<UIComponent>();
-            assemblyResources = new Dictionary<Assembly, string[]>();
+            
             componentsToAdd = new List<UIComponent>();
             componentsToRemove = new List<UIComponent>();
             availableMenus = new List<Type>();
@@ -224,6 +226,8 @@ namespace GTAUI
             UIStyle.GetInstance().RegisterStylingProperties("GTAUI.resources.builtinStyleProperties.json");
 
             RegisterBuiltInJsonTypeMappings();
+
+           
 
             isInitialized = true;
             Log("GTAUI initialized");
@@ -663,63 +667,28 @@ namespace GTAUI
         /// <param name="assembly"></param>
         public void RegisterAssemblyResources(Assembly assembly)
         {
-            if (assemblyResources.ContainsKey(assembly))
-            {
-                return;
-            }
-            string[] resources = assembly.GetManifestResourceNames();
-            Log($"Registering the following resources from {assembly}:\n {string.Join("\n", resources)}");
-            assemblyResources.Add(assembly, resources);
+            uiResourceManager.RegisterAssemblyResources(assembly);
         }
 
         /// <summary>
         /// Get a resource from any of the assemblies registered with <see cref="RegisterAssemblyResources(Assembly)"/> or from the fle system if no embedded resource can be found.
         /// </summary>
         /// <param name="path">The name if it's an embeddable resource or path if it's from the file system.</param>
-        /// <returns>The text contents of the resource or null if the resource could not be found.</returns>
-        public string GetUIResource(string path)
+        /// <typeparam name="T">The type of the resource that is expected to be returned. IF the actual type does not match, null is returned.</typeparam>
+        /// <returns>An object representing the ui resource. The type of the object depends on the manifest entry for the resource. The default object is a string containing the contents of the resource. Null is returned if the resource could not be found.</returns>
+        public T GetUIResource<T>(string path) where T : class
         {
-            foreach (KeyValuePair<Assembly, string[]> assembly in assemblyResources)
-            {
-                if (assembly.Value.Contains(path))
-                {
-                    try
-                    {
-                        Stream resourceStream = assembly.Key.GetManifestResourceStream(path);
-                        if (resourceStream == null)
-                        {
-                            return null;
-                        }
+            return uiResourceManager.GetUIResource<T>(path);
+        }
 
-                        using (StreamReader reader = new StreamReader(resourceStream))
-                        {
-                            return reader.ReadToEnd();
-                        }
-
-                    }
-                    catch (Exception ex)
-                    {
-                        Log($"Error while getting UI resource '{path}': {ex}");
-                        return null;
-                    }
-
-                }
-            }
-
-            try
-            {
-                if (File.Exists(path) == false)
-                {
-                    return null;
-                }
-
-                return File.ReadAllText(path);
-            }
-            catch (Exception ex)
-            {
-                Log($"Error while getting UI resource from file '{path}': {ex}");
-                return null;
-            }
+        /// <summary>
+        /// Register the given provider for the given type string.
+        /// </summary>
+        /// <param name="uiResourceType">The type that can be set in a resource manifest file.</param>
+        /// <param name="provider">The provider to use for resources that gave the given type.</param>
+        public void RegisterUIResourceProvider(string uiResourceType, UIResourceProvider provider)
+        {
+            uiResourceManager.RegisterUIResourceProvider(uiResourceType, provider);
         }
 
         public void RegisterAssemblyMenus(Assembly assembly)

@@ -36,7 +36,7 @@ namespace GTAUI.Styling
         /// <returns><c>true</c> when the loading of the style properties succeeded, <c>false</c> otherwise.</returns>
         public bool RegisterStylingProperties(string uiResourcePath)
         {
-            string json = UIController.GetInstance().GetUIResource(uiResourcePath);
+            string json = UIController.GetInstance().GetUIResource<string>(uiResourcePath);
             if (json == null)
             {
                 return false;
@@ -78,7 +78,7 @@ namespace GTAUI.Styling
         /// <returns><c>true</c> when the loading of the style properties succeeded, <c>false</c> otherwise.</returns>
         public bool ApplyStyle(string uiResourcePath)
         {
-            string json = UIController.GetInstance().GetUIResource(uiResourcePath);
+            string json = UIController.GetInstance().GetUIResource<string>(uiResourcePath);
             if (json == null)
             {
                 return false;

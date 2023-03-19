@@ -59,6 +59,7 @@
   <ItemGroup>
     <Compile Include="CancelableKeyEventManager.cs" />
     <Compile Include="CancelableEventManager.cs" />
+    <Compile Include="SpriteFile.cs" />
     <Compile Include="Extensions.cs" />
     <Compile Include="Internal\ScheduledAction.cs" />
     <Compile Include="InvokableMethod1.cs">
@@ -90,6 +91,11 @@
     <Compile Include="UIComponent.cs" />
     <Compile Include="UIController.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="UIResources\Providers\DefaultUIResourceProvider.cs" />
+    <Compile Include="UIResources\Providers\SpriteResourceProvider.cs" />
+    <Compile Include="UIResources\UIResourceProvider.cs" />
+    <Compile Include="UIResources\UIResourceManager.cs" />
+    <Compile Include="UIResources\UIResourceManifestEntry.cs" />
     <Compile Include="UI\Components\EditableText.cs" />
     <Compile Include="Json\JsonTypeMapper.cs" />
     <Compile Include="Json\JsonTypeMapperConverter.cs" />
@@ -106,13 +112,26 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>InvokableMethod1.cs</LastGenOutput>
     </Content>
+    <EmbeddedResource Include="resources\cursorLoading.png" />
+    <EmbeddedResource Include="resources\cursorResizeVertical.png" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Input\" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="resources\manifest.json" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>COPY "$(TargetDir)GTAUI.dll" "D:\Games\steamapps\common\Grand Theft Auto V\scripts"
 COPY "$(TargetDir)GTAUI.pdb" "D:\Games\steamapps\common\Grand Theft Auto V\scripts"</PostBuildEvent>
   </PropertyGroup>
+  <ProjectExtensions>
+    <VisualStudio>
+      <UserProperties resources_4manifest_1json__JsonSchema="" />
+    </VisualStudio>
+  </ProjectExtensions>
 </Project>

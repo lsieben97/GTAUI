@@ -75,7 +75,7 @@ namespace GTAUI.Menus
 
         private void InitializeFromUIResource()
         {
-            string menuJson = UIController.GetInstance().GetUIResource(UIResourcePath);
+            string menuJson = UIController.GetInstance().GetUIResource<string>(UIResourcePath);
             if (menuJson == null)
             {
                 string message = $"Unable to load menu {GetType()}: UI resource not found: {UIResourcePath}";

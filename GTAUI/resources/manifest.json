@@ -1,0 +1,14 @@
+[
+  {
+    "Name": "GTAUI.resources.cursorResizeVertical.png",
+    "Type": "Sprite",
+    "Width": 36,
+    "Height": 106
+  },
+  {
+    "Name": "GTAUI.resources.cursorLoading.png",
+    "Type": "Sprite",
+    "Width": 64,
+    "Height": 64
+  }
+]
